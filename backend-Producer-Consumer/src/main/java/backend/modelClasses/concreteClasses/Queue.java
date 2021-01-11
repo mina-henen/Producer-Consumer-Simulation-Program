@@ -1,42 +1,34 @@
 package backend.modelClasses.concreteClasses;
 
-import backend.modelClasses.interfaces.IQueue;
-
+import java.util.ArrayList;
 import java.util.List;
 
-public class Queue implements IQueue {
+public class Queue {
+    private List<Integer> products;
+    private List<Integer> machines;
 
-    private Point center;
-    private List<Product> products;
-    private String colour;
-
-    public Queue(Point center, List<Product> products, String colour) {
-        this.center = center;
-        this.products = products;
-        this.colour = colour;
+    public Queue(List<Integer> m) {
+        machines = m;
+        products = new ArrayList<>();
     }
 
-    public Point getCenter() {
-        return center;
+    public void addItem(int item) {
+        products.add(item);
+        /// observer
     }
 
-    public void setCenter(Point center) {
-        this.center = center;
+    public int getItem() {
+        if (productsSize() > 0) {
+            return products.remove(0);
+        }
+        return -1;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public int productsSize() {
+        return products.size();
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    public String getColour() {
-        return colour;
-    }
-
-    public void setColour(String colour) {
-        this.colour = colour;
+    public List<Integer> getMachinesList() {
+        return machines;
     }
 }

@@ -1,32 +1,19 @@
 package backend.modelClasses.concreteClasses;
 
-public class Product implements backend.modelClasses.interfaces.IProduct {
+public class Product {
+    private int startTime;
+    private int color;
 
-    private double id;
-    private String colour;
-
-    public Product(double id, String colour) {
-        this.id = id;
-        this.colour = colour;
+    public Product() {
+        startTime = ((int) Math.random() % 15 + 2) * Global.unitTime;
+        color = ((int) Math.random() % 0xFFFFF0) + 0x00000A;
     }
 
-    @Override
-    public double getId() {
-        return id;
+    public int getColor() {
+        return color;
     }
 
-    @Override
-    public void setId(double id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getColour() {
-        return colour;
-    }
-
-    @Override
-    public void setColour(String colour) {
-        this.colour = colour;
+    public int getstartTime() {
+        return startTime;
     }
 }
