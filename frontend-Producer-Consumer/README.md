@@ -1,4 +1,4 @@
-# frontend-producer-consumer
+# frontend-paint
 
 ## Project setup
 ```
