@@ -1,5 +1,34 @@
 package backend.modelClasses.concreteClasses;
 
-public class Queue {
+import java.util.ArrayList;
+import java.util.List;
 
+public class Queue {
+    private List<Integer> products;
+    private List<Integer> machines;
+
+    public Queue(List<Integer> m) {
+        machines = m;
+        products = new ArrayList<>();
+    }
+
+    public void addItem(int item) {
+        products.add(item);
+        /// observer
+    }
+
+    public int getItem() {
+        if (productsSize() > 0) {
+            return products.remove(0);
+        }
+        return -1;
+    }
+
+    public int productsSize() {
+        return products.size();
+    }
+
+    public List<Integer> getMachinesList() {
+        return machines;
+    }
 }
