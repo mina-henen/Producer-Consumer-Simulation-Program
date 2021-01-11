@@ -1,6 +1,6 @@
-package models.concreteClasses;
+package modelClasses.concreteClasses;
 
-import models.interfaces.IDiagram;
+import modelClasses.interfaces.IDiagram;
 
 import java.util.List;
 

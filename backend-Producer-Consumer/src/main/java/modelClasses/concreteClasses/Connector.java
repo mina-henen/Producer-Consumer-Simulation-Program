@@ -1,4 +1,4 @@
-package models.concreteClasses;
+package modelClasses.concreteClasses;
 
 //Class modelling connection line between a queue and machine
 public class Connector {

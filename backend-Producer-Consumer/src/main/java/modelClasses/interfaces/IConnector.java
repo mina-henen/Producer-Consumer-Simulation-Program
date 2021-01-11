@@ -1,4 +1,4 @@
-package models.interfaces;
+package modelClasses.interfaces;
 
 public interface IConnector {
 }
