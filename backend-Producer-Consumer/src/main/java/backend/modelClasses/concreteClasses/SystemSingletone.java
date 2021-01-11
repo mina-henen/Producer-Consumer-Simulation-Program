@@ -2,23 +2,23 @@ package backend.modelClasses.concreteClasses;
 
 import java.util.List;
 
-public class SystemSingltone {
+public class SystemSingletone {
 
     List<Machine> machineslist;
     List<Queue> queuesList;
     List<Product> productsList;
 
-    private static SystemSingltone systemSingltone = null;
+    private static SystemSingletone systemSingletone = null;
 
-    private SystemSingltone() {
+    private SystemSingletone() {
     }
 
-    public static SystemSingltone getInstance() {
-        if (systemSingltone == null) {
-            systemSingltone = new SystemSingltone();
-            return systemSingltone;
+    public static SystemSingletone getInstance() {
+        if (systemSingletone == null) {
+            systemSingletone = new SystemSingletone();
+            return systemSingletone;
         }
-        return systemSingltone;
+        return systemSingletone;
     }
 
     public List<Machine> getMachinesList() {

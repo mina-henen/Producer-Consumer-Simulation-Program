@@ -19,10 +19,10 @@ public class SystemBuilder {
      * }
      */
 
-    private SystemSingltone systemSingltone;
+    private SystemSingletone systemSingletone;
 
     public void systemBuild(List<List<Integer>> ques, List<Integer> machines, int numberOfProducts) {
-        systemSingltone = SystemSingltone.getInstance();
+        systemSingletone = SystemSingletone.getInstance();
         queueBuild(ques);
         machineBuild(ques, machines);
         productBuild(numberOfProducts);
@@ -34,7 +34,7 @@ public class SystemBuilder {
         for (int i = 0; i < ques.size(); i++) {
             temp.add(new Queue(ques.get(i)));
         }
-        systemSingltone.setQueuesList(temp);
+        systemSingletone.setQueuesList(temp);
     }
 
     private void machineBuild(List<List<Integer>> ques, List<Integer> machines) {
@@ -54,7 +54,7 @@ public class SystemBuilder {
         for (int i = 0; i < machines.size(); i++) {
             temp.get(i).setinputQues(inputQues.get(i));
         }
-        systemSingltone.setMachinesList(temp);
+        systemSingletone.setMachinesList(temp);
     }
 
     private void productBuild(int numberOfProducts) {
@@ -62,6 +62,6 @@ public class SystemBuilder {
         for (int i = 0; i < numberOfProducts; i++) {
             temp.add(new Product());
         }
-        systemSingltone.setProductsList(temp);
+        systemSingletone.setProductsList(temp);
     }
 }
