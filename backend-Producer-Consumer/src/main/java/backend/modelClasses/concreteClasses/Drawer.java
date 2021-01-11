@@ -1,6 +1,6 @@
-package modelClasses.concreteClasses;
+package backend.modelClasses.concreteClasses;
 
-import modelClasses.interfaces.IDrawer;
+import backend.modelClasses.interfaces.IDrawer;
 
 public class Drawer implements IDrawer {
     @Override
