@@ -7,16 +7,16 @@
         
         <!-- operations on board buttons -->
         <div>
-            <button class="opt" @click="addMachine" title="undo">Add machine</button>
-            <button class="opt" @click="addQueue" title="redo">Add queue</button>
-            <button class="opt" @click="btnclear" title="clear screen">Clear</button>
+            <button class="opt" @click="addMachine" title="Add machine">Add machine</button>
+            <button class="opt" @click="addQueue" title="Add queue">Add queue</button>
+            <button class="opt" title="Connect">Connect</button>
+            <button class="opt" title="disconnect">Disconnect</button>
+            <button class="opt" @click="setMove" title="move" >Move</button>
+            <button class="opt" @click="setDelete" title="delete">Delete</button>
+            <button class="opt" @click="clear" title="clear screen">Clear</button>
         </div>
-        
-        <!-- operations on shapes button -->
         <div>
-            <button class="move" @click="setMove" title="move" ></button>
-            <button class="delete" @click="setDelete" title="delete"></button>
-            <button class="copy" @click="setCopy" title="copy"></button>
+            <button class="smiul" title="Start">Start simulation</button>
         </div>
         <!-- drawing area -->
         <canvas
@@ -133,7 +133,18 @@ export default {
                 default:
                     break;
             }
+            this.type=null;
             
+        },
+        
+        /* clear functions */
+        clear() {
+            var canvas = document.getElementById("myCanvas");
+            var context = canvas.getContext("2d");
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            this.mi=1;
+            this.qi=1;
+            this.start();
         },
 
         /************************************************************************ OLD CODE *********************************************************************/
@@ -627,19 +638,6 @@ export default {
         setResize() {
             this.oder = "RESIZE";
             this.resizeRatio = prompt("Enter resize ratio please");
-        },
-        /* clear functions */
-        clear() {
-            var canvas = document.getElementById("myCanvas");
-            var context = canvas.getContext("2d");
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            this.mi=1;
-            this.qi=1;
-        },
-        async btnclear() {
-            this.clear();
-            const ans = await axios.get("http://localhost:8095/clear/");
-            this.currBoardIndex += ans.data;
         }
     }
 };
@@ -653,128 +651,11 @@ export default {
 .shapes {
     text-align: center;
 }
-.square {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/square.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.square:hover {
-    background-image: url("./images/sq\ hov.png");
-}
-.rectangle {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/rectangle.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.rectangle:hover {
-    background-image: url("./images/rec\ hov.png");
-}
-.ellipse {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/ellipse.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.ellipse:hover {
-    background-image: url("./images/ell\ hov.png");
-}
-.triangle {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/triangle.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.triangle:hover {
-    background-image: url("./images/tri\ hov.png");
-}
-.circle {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/circle.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.circle:hover {
-    background-image: url("./images/circle\ ho.png");
-}
-.line {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/line.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.line:hover {
-    background-image: url("./images/line\ hov.png");
-}
-.move {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/move.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.move:hover {
-    background-image: url("./images/move\ hove.png");
-}
-.delete {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/del.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.delete:hover {
-    background-image: url("./images/del\ hov.png");
-}
-.resize {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/resize.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.resize:hover {
-    background-image: url("./images/resize\ hov.png");
-}
-.copy {
-    height: 40px;
-    width: 40px;
-    background-image: url("./images/copy.png");
-    background-size: cover;
-    border: none;
-    margin: 2px;
-    cursor: pointer;
-}
-.copy:hover {
-    background-image: url("./images/copy\ hov.png");
-}
+
+
 .opt {
     display: inline-block;
+    background: #9fdcff;
     padding: 0.35em 1.2em;
     border: 0.1em solid #000000;
     margin: 0 0.3em 0.3em 0;
@@ -783,13 +664,32 @@ export default {
     text-decoration: none;
     font-family: "Roboto", sans-serif;
     font-weight: 300;
-    color: #000000;
+    color: #2c1500;
     text-align: center;
     cursor: pointer;
 }
 .opt:hover {
+    color: #fbff00;
+    background-color: #09005a;
+}
+.smiul {
+    display: inline-block;
+    background: #ff0000;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #000000;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.25cm;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
     color: #ffffff;
-    background-color: #000000;
+    text-align: center;
+    cursor: pointer;
+}
+.smiul:hover {
+    color: #000000;
+    background-color: #00dd25;
 }
 @media all and (max-width: 30em) {
     .opt {
@@ -803,7 +703,7 @@ label {
     margin-left: 20px;
 }
 .drawing-board {
-    cursor: crosshair;
+    cursor:copy;
     background-color: rgb(255, 255, 255);
     position: relative;
     display: block;
