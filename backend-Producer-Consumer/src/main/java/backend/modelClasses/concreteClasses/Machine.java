@@ -1,14 +1,17 @@
 package backend.modelClasses.concreteClasses;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import backend.modelClasses.interfaces.IMachine;
 
-public class Machine implements IMachine {
+public class Machine implements Runnable {
+    private Point location;
     private int serviceTime;
     private List<Integer> inputQues;
     private int outputQue;
     private int currProduct;
+    private int color;
 
     public Machine(int out) {
         serviceTime = ((int) Math.random() % 15 + 2) * Global.unitTime;
@@ -85,13 +88,43 @@ public class Machine implements IMachine {
         this.id = id;
     }
 
-    @Override
-    public void updateColour() {
+    public Point getLocation() {
+        return location;
+    }
 
+    public void setLocation(Point p) {
+        location = p;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int colour) {
+        this.color = colour;
     }
 
     @Override
-    public void flashMachine() {
-
+    public void run() {
+        Diagram diagram = Diagram.getInstance();
+        try {
+            for (int q : inputQues) {
+                Queue input = diagram.getQueues().get(q);
+                if (input.productsSize() > 0) {
+                    currProduct = input.getItem();
+                    color = diagram.getProductsList().get(currProduct).getColor();
+                    Thread.sleep(serviceTime);
+                    Queue output = diagram.getQueues().get(outputQue);
+                    output.addItem(currProduct);
+                    if (output.productsSize() == 1) {
+                        // observer
+                        // open new thread
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        currProduct = -1;
+        color = Global.defualtColor;
     }
 }

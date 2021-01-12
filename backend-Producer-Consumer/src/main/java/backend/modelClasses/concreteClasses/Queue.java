@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Queue {
+    private Point location;
     private List<Integer> products;
     private List<Integer> machines;
 
@@ -30,5 +31,13 @@ public class Queue {
 
     public List<Integer> getMachinesList() {
         return machines;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point p) {
+        location = p;
     }
 }

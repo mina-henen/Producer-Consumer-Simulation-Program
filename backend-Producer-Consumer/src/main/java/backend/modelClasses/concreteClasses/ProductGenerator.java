@@ -1,10 +1,23 @@
 package backend.modelClasses.concreteClasses;
 
-import backend.modelClasses.interfaces.IProductGenerator;
+public class ProductGenerator implements Runnable {
 
-public class ProductGenerator implements IProductGenerator {
     @Override
-    public void generateProducts() {
-
+    public void run() {
+        Diagram diagram = Diagram.getInstance();
+        try {
+            int i = 0;
+            for (Product item : diagram.getProductsList()) {
+                Thread.sleep(item.getstartTime());
+                diagram.getQueues().get(0).addItem(i);
+                if (diagram.getQueues().get(0).productsSize() == 1) {
+                    // observer
+                    // open new thread
+                }
+                i++;
+            }
+        } catch (Exception e) {
+        }
     }
+
 }
