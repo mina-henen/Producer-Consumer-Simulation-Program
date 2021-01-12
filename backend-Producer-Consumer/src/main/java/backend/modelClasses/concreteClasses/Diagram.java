@@ -1,16 +1,26 @@
 package backend.modelClasses.concreteClasses;
 
 import backend.modelClasses.interfaces.IDiagram;
+import org.springframework.boot.test.util.TestPropertyValues;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //Class for storing all the canvas elements in the frontend
 public class Diagram implements IDiagram {
-    private List<Queue> queues;
-    private List<Machine> machines;
+    private List<Queue> queues= new ArrayList<>();
+    private List<Machine> machines = new ArrayList<>();
     private List<Product> productsList;
-    // private List<Connector> connectors;
+    private List<connection> machinesIn= new ArrayList<>();
+    private List<connection> machinesOut= new ArrayList<>();
 
+    public List<connection> getMachinesIn() {
+        return machinesIn;
+    }
+
+    public List<connection> getMachinesOut() {
+        return machinesOut;
+    }
     /*
      * public Diagram(List<Queue> queues, List<Machine> machines, List<Connector>
      * connectors) { this.queues = queues; this.machines = machines; this.connectors
@@ -27,6 +37,53 @@ public class Diagram implements IDiagram {
             diagram = new Diagram();
         }
         return diagram;
+    }
+
+    @Override
+    public void addMachine(Machine m) {
+        machines.add(m);
+    }
+
+    @Override
+    public void addQueue(Queue q) {
+        queues.add(q);
+    }
+
+    @Override
+    public void removeMachine(Machine m) {
+        for(Machine mach: machines){
+            if (m.getID()== mach.getID()){
+                machines.remove(mach);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void removeQueue(Queue q) {
+        for(Queue qu: queues){
+            if (q.getID()== qu.getID()){
+                machines.remove(qu);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void connect(Machine m, Queue q) {
+        for (connection c : machinesOut){
+            if(c.getP1().toString().equals(m.getLocation().toString())){
+                return;
+            }
+        }
+        connection con = new connection(m.getLocation(), q.getLocation());
+        machinesOut.add(con);
+    }
+
+    @Override
+    public void connect(Queue q, Machine m) {
+        connection con = new connection(q.getLocation(), m.getLocation());
+        machinesIn.add(con);
     }
 
     @Override
@@ -57,14 +114,4 @@ public class Diagram implements IDiagram {
         productsList = p;
     }
 
-    @Override
-    public List<Connector> getConnectors() {
-        // return connectors;
-        return null;
-    }
-
-    @Override
-    public void setConnectors(List<Connector> connectors) {
-        // this.connectors = connectors;
-    }
 }

@@ -7,6 +7,24 @@ public class Queue {
     private Point location;
     private List<Integer> products;
     private List<Integer> machines;
+    private long ID;
+
+
+    public Queue(Point location) {
+        this.location = location;
+        ID = System.currentTimeMillis();
+    }
+
+    @Override
+    public String toString() {
+        return "Queue{" +
+                "location=" + location.toString() +
+                '}';
+    }
+
+    public long getID() {
+        return ID;
+    }
 
     public Queue(List<Integer> m) {
         machines = m;

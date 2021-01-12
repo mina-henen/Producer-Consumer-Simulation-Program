@@ -1,6 +1,7 @@
 package backend.modelClasses.concreteClasses;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import backend.modelClasses.interfaces.IMachine;
@@ -12,12 +13,17 @@ public class Machine implements Runnable {
     private int outputQue;
     private int currProduct;
     private int color;
+    private long ID;
 
     public Machine(int out) {
         serviceTime = ((int) Math.random() % 15 + 2) * Global.unitTime;
         outputQue = out;
         currProduct = -1;
         inputQues = new ArrayList<>();
+    }
+
+    public long getID() {
+        return ID;
     }
 
     public int getCurrProduct() {
@@ -48,6 +54,18 @@ public class Machine implements Runnable {
     private String colour;
     private double rate;
     private double id;
+
+    public Machine(Point location) {
+        this.location = location;
+        ID = System.currentTimeMillis();
+    }
+
+    @Override
+    public String toString() {
+        return "Machine{" +
+                "location=" + location.toString() +
+                '}';
+    }
 
     public Machine(Point center, String colour, double rate, double id) {
         this.center = center;
