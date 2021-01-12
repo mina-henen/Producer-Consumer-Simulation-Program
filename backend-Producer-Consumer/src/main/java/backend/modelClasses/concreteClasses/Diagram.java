@@ -51,6 +51,17 @@ public class Diagram implements IDiagram {
 
     @Override
     public void removeMachine(Machine m) {
+        for (connection c: machinesOut){
+            if (c.getP1().toString().equals(m.getLocation().toString())){
+                machinesOut.remove(c);
+                break;
+            }
+        }
+        for (connection c: machinesIn){
+            if (c.getP2().toString().equals(m.getLocation().toString())){
+                machinesOut.remove(c);
+            }
+        }
         for(Machine mach: machines){
             if (m.getID()== mach.getID()){
                 machines.remove(mach);
@@ -61,6 +72,16 @@ public class Diagram implements IDiagram {
 
     @Override
     public void removeQueue(Queue q) {
+        for (connection c: machinesOut){
+            if (c.getP2().toString().equals(q.getLocation().toString())){
+                machinesOut.remove(c);
+            }
+        }
+        for (connection c: machinesIn){
+            if (c.getP1().toString().equals(q.getLocation().toString())){
+                machinesOut.remove(c);
+            }
+        }
         for(Queue qu: queues){
             if (q.getID()== qu.getID()){
                 machines.remove(qu);
