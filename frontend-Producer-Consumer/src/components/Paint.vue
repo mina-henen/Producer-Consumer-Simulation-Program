@@ -118,10 +118,11 @@ export default {
             var y = e.offsetY;
             switch(this.type){
                 case "m":
-                    this.machine.location.x = x;
+                    /*this.machine.location.x = x;
                     this.machine.location.y = y;
                     const response = await axios.post("http://localhost:8095/add/machine/", this.machine);
-                    this.diagram = response.data;         
+                    this.diagram = response.data;
+                    */         
                     ctx.fillStyle = '#38ff78';
                     ctx.beginPath();
                     ctx.arc(x,y,50,0,2 * Math.PI);
@@ -133,8 +134,12 @@ export default {
                     this.mi++;
                     break;
                 case "q":
+                    /*
                     this.queue.location.x = x;
                     this.queue.location.y = y;
+                    const response = await axios.post("http://localhost:8095/add/queue/", this.machine);
+                    this.diagram = response.data;
+                    */
                     ctx.fillStyle = '#ff4040';
                     ctx.fillRect(x-40,y-25,80,50);
                     ctx.strokeRect(x-40,y-25,80,50);
