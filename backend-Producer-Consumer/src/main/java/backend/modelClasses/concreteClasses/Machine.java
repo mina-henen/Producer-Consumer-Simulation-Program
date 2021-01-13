@@ -70,6 +70,7 @@ public class Machine implements Runnable {
         try {
             boolean flag = true;
             while (true) {
+                flag = true;
                 for (Queue input : inputQues) {
                     while (input.productsSize() > 0) {
                         flag = false;

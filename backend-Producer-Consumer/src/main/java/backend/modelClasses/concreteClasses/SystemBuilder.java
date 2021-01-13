@@ -26,7 +26,6 @@ public class SystemBuilder {
         queueBuild();
         machineBuild();
         productBuild(numberOfProducts);
-        /// copy to memo
     }
 
     private void queueBuild() {
