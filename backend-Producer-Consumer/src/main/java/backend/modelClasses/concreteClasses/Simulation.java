@@ -1,8 +1,7 @@
 package backend.modelClasses.concreteClasses;
 
 public class Simulation {
-
-    public void startSimulation() {
+    public static void startSimulation() {
         Diagram diagram = Diagram.getInstance();
         SnapShot snapShot = new SnapShot();
         snapShot.save(diagram);

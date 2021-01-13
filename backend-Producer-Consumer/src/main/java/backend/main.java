@@ -20,14 +20,14 @@ public class main {
         for (Queue q : diagram.getQueues()) {
             System.out.println(q.toString());
         }
-        diagram.connect(diagram.getMachines().get(2), diagram.getQueues().get(3));
+        /*diagram.connect(diagram.getMachines().get(2), diagram.getQueues().get(3));
         diagram.connect(diagram.getMachines().get(1), diagram.getQueues().get(0));
         diagram.connect(diagram.getMachines().get(0), diagram.getQueues().get(2));
         diagram.connect(diagram.getQueues().get(3), diagram.getMachines().get(1));
         diagram.connect(diagram.getQueues().get(1), diagram.getMachines().get(1));
         diagram.connect(diagram.getQueues().get(5), diagram.getMachines().get(1));
         diagram.connect(diagram.getQueues().get(2), diagram.getMachines().get(1));
-
+*/
         System.out.println("connection enter machines");
         for (Connection c : diagram.getMachinesIn()) {
             System.out.println(c.toString());
