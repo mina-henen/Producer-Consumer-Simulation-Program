@@ -60,7 +60,7 @@ public class Diagram implements IDiagram {
             c.getID2().remove(m);
         }
         for (Machine mach : machines) {
-            if (m == mach.getID()) {
+            if (m == mach.getID()/10) {
                 machines.remove(mach);
                 break;
             }
@@ -78,8 +78,8 @@ public class Diagram implements IDiagram {
             }
         }
         for (Queue qu : queues) {
-            if (q == qu.getID()) {
-                machines.remove(qu);
+            if (q == qu.getID()/10) {
+                queues.remove(qu);
                 break;
             }
         }

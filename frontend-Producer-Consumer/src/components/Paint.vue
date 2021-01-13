@@ -12,7 +12,7 @@
             <button class="opt" title="Connect">Connect</button>
             <button class="opt" title="disconnect">Disconnect</button>
             <button class="opt" @click="setMove" title="move" >Move</button>
-            <button class="opt" @click="setDelete" title="delete">Delete</button>
+            <button class="opt" @click="delet" title="delete">Delete</button>
             <button class="opt" @click="clear" title="clear screen">Clear</button>
         </div>
         <div>
@@ -39,43 +39,25 @@ export default {
     /* data used in the front-end project */
     data() {
         return {
-            type: null,
+            operation: null,
             mi:1,
             qi:1,
-            currBoardIndex: 0,
-            shapes: [null],
-            /* shapes structure that carry whole shape data */
-            shapeStruct: {
-                points: [],
-                shapeType: "null",
-                colour: "null",
-                indexInBoard: "-1",
-                stroke: "null",
-                strokeWidth: "null",
-                length: "null",
-                width: "null",
-                sideLength: "null",
-                hRadius: "null",
-                vRadius: "null",
-                radius: "null"
+            
+            diagram: {
+                machines:[],
+                queues:[]
             },
-            operation: "null",
-            numOfShapes: 0,
-            canvas: null,
-            selectedShape: false,
-            selShape: "null",
-            xBefMov: 0,
-            yBefMov: 0,
-            movedX: 0,
-            movedY: 0,
-            oder: "null",
-            resizeRatio: 1,
-            diagram: "",
             machine: {
-                location:"",
+                location: {
+                    x: 0,
+                    y:0
+                }
             },
             queue: {
-                location:""
+                location: {
+                    x: 0,
+                    y:0
+                }
             }
         };
     },
@@ -87,10 +69,13 @@ export default {
     },
     methods: {
         addMachine(){
-            this.type = "m"
+            this.operation = "ADD MACHINE"
         },
         addQueue(){
-            this.type = "q"
+            this.operation = "ADD QUEUE"
+        },
+        delet(){
+            this.operation = "DELETE"
         },
         start(){
             var canvas = document.getElementById("myCanvas");
@@ -116,45 +101,106 @@ export default {
             var ctx = canvas.getContext("2d");
             var x = e.offsetX;
             var y = e.offsetY;
-            switch(this.type){
-                case "m":
-                    /*this.machine.location.x = x;
+            switch(this.operation){
+                case "ADD MACHINE":{
+                    this.machine.location.x = x;
                     this.machine.location.y = y;
-                    const response = await axios.post("http://localhost:8095/add/machine/", this.machine);
+                    console.log(this.machine.location);
+                    const response = await axios.post("http://localhost:8095/add/machine/", this.machine.location);
                     this.diagram = response.data;
-                    */         
-                    ctx.fillStyle = '#38ff78';
-                    ctx.beginPath();
-                    ctx.arc(x,y,50,0,2 * Math.PI);
-                    ctx.fill();
-                    ctx.stroke();
-                    ctx.fillStyle = "black";
-                    ctx.font = "30px Arial";
-                    ctx.fillText("M"+this.mi, x-20, y+5);
-                    this.mi++;
+                           
+                    
                     break;
-                case "q":
-                    /*
+                }
+                case "ADD QUEUE":
+                    {
                     this.queue.location.x = x;
                     this.queue.location.y = y;
-                    const response = await axios.post("http://localhost:8095/add/queue/", this.machine);
+                    console.log(this.queue);
+                    const response = await axios.post("http://localhost:8095/add/queue/", this.queue.location);
                     this.diagram = response.data;
-                    */
-                    ctx.fillStyle = '#ff4040';
-                    ctx.fillRect(x-40,y-25,80,50);
-                    ctx.strokeRect(x-40,y-25,80,50);
-                    ctx.fillStyle = "black";
-                    ctx.font = "30px Arial";
-                    ctx.fillText("Q"+this.qi, x-20, y+10);
-                    this.qi++;
+                    
+                    
+                    break;
+                    }
+                case "DELETE":
+                    var i ;
+                    for(i = 0 ; i<this.diagram.machines.length; ++i){
+                    ctx.beginPath();
+                    ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
+                    ctx.closePath();
+                    if (ctx.isPointInPath(x, y)){
+                        console.log(this.diagram.machines[i].id);
+                        const response = await axios.post("http://localhost:8095/remove/machine/", this.diagram.machines[i].id);
+                        this.diagram = response.data;
+                        break;
+                        }
+                    }
+                    for(i = 0 ; i<this.diagram.queues.length; ++i){
+                    ctx.beginPath();
+                    ctx.rect(this.diagram.queues[i].location.x-40,this.diagram.queues[i].location.y-25,80,50);
+                    ctx.closePath();
+                    if (ctx.isPointInPath(x, y)){
+                        console.log(this.diagram.queues[i].id);
+                        const response = await axios.post("http://localhost:8095/remove/queue/", this.diagram.queues[i].id);
+                        this.diagram = response.data;
+                        break;
+                        }
+                    }
                     break;
                 default:
+                    /*for(var i = 0 ; i<this.diagram.machines.length; ++i){
+                    ctx.beginPath();
+                    ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
+                    ctx.closePath();
+                    if (ctx.isPointInPath(x, y))
+                    {
+                        console.log(this.diagram.machines[i].id);
+                    }
+                }*/
                     break;
             }
-            this.type=null;
+            this.clear();
+            // draw red conections (into machines)
+            /* 
+            some code
+            **/
+
+            // draw blue connections (out of machines)
+            /*
+            some code
+            */
+
+            // draw machines
+            for(i = 0 ; i<this.diagram.machines.length; ++i){
+                ctx.fillStyle = '#38ff78';
+                ctx.beginPath();
+                ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = "black";
+                ctx.font = "30px Arial";
+                ctx.fillText("M"+this.mi, this.diagram.machines[i].location.x-20, this.diagram.machines[i].location.y+5);
+                this.mi++;
+            }
+           
+            // draw queues
+            for(i = 0 ; i<this.diagram.queues.length; ++i){
+                ctx.fillStyle = '#ff4040';
+                ctx.fillRect(this.diagram.queues[i].location.x-40,this.diagram.queues[i].location.y-25,80,50);
+                ctx.strokeRect(this.diagram.queues[i].location.x-40,this.diagram.queues[i].location.y-25,80,50);
+                ctx.fillStyle = "black";
+                ctx.font = "30px Arial";
+                ctx.fillText("Q"+this.qi, this.diagram.queues[i].location.x-20, this.diagram.queues[i].location.y+10);
+                this.qi++;
+            }
+            console.log(this.diagram);
+            this.operation=null;
             
         },
-        
+        connect(){
+            
+        },
         /* clear functions */
         clear() {
             var canvas = document.getElementById("myCanvas");

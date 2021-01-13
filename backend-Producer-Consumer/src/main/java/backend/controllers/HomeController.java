@@ -8,17 +8,41 @@ import org.springframework.web.bind.annotation.*;
 public class HomeController {
 
     @PostMapping("/add/machine/")
-    public Diagram addMachine(@RequestBody Machine machine) {
+    public Diagram addMachine(@RequestBody Point point) {
+        //Point point = new Point(po[0],po[1]);
+        System.out.println(point.toString());
         Diagram diagram = Diagram.getInstance();
-        diagram.addMachine(machine);
+        diagram.addMachine(new Machine(point));
+
         return diagram;
     }
 
     @PostMapping("/add/queue/")
-    public Diagram addQueue(@RequestBody Queue queue) {
+    public Diagram addQueue(@RequestBody Point point) {
+        //Point point = new Point(po[0],po[1]);
+        System.out.println(point.toString());
         Diagram diagram = Diagram.getInstance();
-        diagram.addQueue(queue);
+        diagram.addQueue(new Queue(point));
+
         return diagram;
+    }
+
+    @PostMapping("/remove/machine/")
+    public Diagram removeMachine(@RequestBody String ID) {
+        Diagram diagram = Diagram.getInstance();
+        diagram.removeMachine(Long.valueOf(ID.substring(0,12)));
+
+        return diagram;
+
+    }
+
+    @PostMapping("/remove/queue/")
+    public Diagram removeQueue(@RequestBody String ID) {
+        Diagram diagram = Diagram.getInstance();
+        diagram.removeQueue(Long.valueOf(ID.substring(0,12)));
+
+        return diagram;
+
     }
 
     @PostMapping("/connect/machine/queue/")
@@ -45,9 +69,9 @@ public class HomeController {
         Diagram diagram = Diagram.getInstance();
         return diagram;
     }
-
+    /*
     @GetMapping("/start/simulation/")
     public void startSimulation() {
         Simulation.startSimulation();
-    }
+    }*/
 }
