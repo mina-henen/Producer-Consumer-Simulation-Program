@@ -11,9 +11,8 @@
             <button class="opt" @click="addQueue" title="Add queue">Add queue</button>
             <button class="opt" @click="connect" title="Connect">Connect</button>
             <button class="opt" title="disconnect">Disconnect</button>
-            <button class="opt" @click="setMove" title="move" >Move</button>
             <button class="opt" @click="delet" title="delete">Delete</button>
-            <button class="opt" @click="clear" title="clear screen">Clear</button>
+            <button class="opt" @click="clearRequest()" title="clear screen">New Diagram</button>
         </div>
         <div>
             <button class="smiul" title="Start">Start simulation</button>
@@ -277,6 +276,12 @@ export default {
             this.mi=1;
             this.qi=1;
             this.start();
+        },
+        async clearRequest() {
+            const response = await axios.get("http://localhost:8095/clear/");
+            this.diagram = response.data;
+            this.diagram = "";
+            this.clear();
         },
 
         /************************************************************************ OLD CODE *********************************************************************/

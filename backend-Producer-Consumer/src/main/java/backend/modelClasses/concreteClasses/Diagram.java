@@ -77,9 +77,11 @@ public class Diagram implements IDiagram {
                         break;
                     }
                 }
-                for (connectionLine l: machinesInL) {
+                for (int i = 0; i < machinesInL.size(); i++) {
+                    connectionLine l = machinesInL.get(i);
                     if (l.getP2().toString().equals(mach.getLocation().toString())) {
                         machinesInL.remove(l);
+                        i = i - 1;
                     }
                 }
                 machines.remove(mach);
@@ -105,9 +107,11 @@ public class Diagram implements IDiagram {
                         machinesOutL.remove(l);
                     }
                 }
-                for (connectionLine l: machinesInL) {
+                for (int i = 0; i < machinesInL.size(); i++) {
+                    connectionLine l = machinesInL.get(i);
                     if (l.getP1().toString().equals(qu.getLocation().toString())) {
                         machinesInL.remove(l);
+                        i = i - 1;
                     }
                 }
                 queues.remove(qu);
@@ -185,4 +189,8 @@ public class Diagram implements IDiagram {
         productsList = p;
     }
 
+    public static Diagram clear() {
+        diagram = new Diagram();
+        return diagram;
+    }
 }

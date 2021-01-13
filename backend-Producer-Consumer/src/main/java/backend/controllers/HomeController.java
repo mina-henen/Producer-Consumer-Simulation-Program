@@ -83,7 +83,6 @@ public class HomeController {
             }
         }
         diagram.connect(c2,c1);
-
         return diagram;
     }
 
@@ -97,4 +96,9 @@ public class HomeController {
     public void startSimulation() {
         Simulation.startSimulation();
     }*/
+
+    @GetMapping("/clear/")
+    public void clear() {
+        Diagram diagram = Diagram.clear();
+    }
 }
