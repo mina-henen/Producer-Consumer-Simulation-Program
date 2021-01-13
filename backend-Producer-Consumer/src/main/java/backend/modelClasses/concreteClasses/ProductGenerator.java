@@ -6,15 +6,9 @@ public class ProductGenerator implements Runnable {
     public void run() {
         Diagram diagram = Diagram.getInstance();
         try {
-            int i = 0;
             for (Product item : diagram.getProductsList()) {
                 Thread.sleep(item.getstartTime());
-                diagram.getQueues().get(0).addItem(i);
-                if (diagram.getQueues().get(0).productsSize() == 1) {
-                    // observer
-                    // open new thread
-                }
-                i++;
+                diagram.getQueues().get(0).addItem(item.getColor());
             }
         } catch (Exception e) {
         }

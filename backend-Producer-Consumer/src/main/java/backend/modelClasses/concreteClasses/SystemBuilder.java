@@ -19,42 +19,53 @@ public class SystemBuilder {
      * }
      */
 
-    private SystemSingletone systemSingletone;
+    private Diagram diagram;
 
-    public void systemBuild(List<List<Integer>> ques, List<Integer> machines, int numberOfProducts) {
-        systemSingletone = SystemSingletone.getInstance();
-        queueBuild(ques);
-        machineBuild(ques, machines);
+    public void systemBuild(int numberOfProducts) {
+        diagram = Diagram.getInstance();
+        queueBuild();
+        machineBuild();
         productBuild(numberOfProducts);
         /// copy to memo
     }
 
-    private void queueBuild(List<List<Integer>> ques) {
-        List<Queue> temp = new ArrayList<>(ques.size());
-        for (int i = 0; i < ques.size(); i++) {
-            temp.add(new Queue(ques.get(i)));
-        }
-        systemSingletone.setQueuesList(temp);
-    }
+    private void queueBuild() {
 
-    private void machineBuild(List<List<Integer>> ques, List<Integer> machines) {
-        List<Machine> temp = new ArrayList<>(machines.size());
-        for (int i = 0; i < machines.size(); i++) {
-            temp.add(new Machine(machines.get(i)));
-        }
-        List<List<Integer>> inputQues = new ArrayList<>(machines.size());
-        for (int i = 0; i < machines.size(); i++) {
-            inputQues.add(new ArrayList<>());
-        }
-        for (int i = 0; i < ques.size(); i++) {
-            for (int j = 0; j < ques.get(i).size(); j++) {
-                inputQues.get(ques.get(i).get(j)).add(i);
+        for (Connection c : diagram.getMachinesIn()) {
+            Queue currQueue = null;
+            for (Queue q : diagram.getQueues()) {
+                if (q.getID() == c.getID1()) {
+                    currQueue = q;
+                    break;
+                }
+            }
+            for (long m : c.getID2()) {
+                for (Machine targetM : diagram.getMachines()) {
+                    if (m == targetM.getID()) {
+                        currQueue.getMachinesList().add(targetM);
+                        targetM.getinputQue().add(currQueue);
+                    }
+                }
             }
         }
-        for (int i = 0; i < machines.size(); i++) {
-            temp.get(i).setinputQues(inputQues.get(i));
+    }
+
+    private void machineBuild() {
+        for (Connection c : diagram.getMachinesOut()) {
+            Machine targeMachine = null;
+            for (Machine m : diagram.getMachines()) {
+                if (m.getID() == c.getID1()) {
+                    targeMachine = m;
+                    break;
+                }
+            }
+            for (Queue q : diagram.getQueues()) {
+                if (q.getID() == c.getID2().get(0)) {
+                    targeMachine.setOutputQue(q);
+                    break;
+                }
+            }
         }
-        systemSingletone.setMachinesList(temp);
     }
 
     private void productBuild(int numberOfProducts) {
@@ -62,6 +73,6 @@ public class SystemBuilder {
         for (int i = 0; i < numberOfProducts; i++) {
             temp.add(new Product());
         }
-        systemSingletone.setProductsList(temp);
+        diagram.setProductsList(temp);
     }
 }

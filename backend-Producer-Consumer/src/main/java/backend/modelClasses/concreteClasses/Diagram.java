@@ -1,24 +1,23 @@
 package backend.modelClasses.concreteClasses;
 
 import backend.modelClasses.interfaces.IDiagram;
-import org.springframework.boot.test.util.TestPropertyValues;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //Class for storing all the canvas elements in the frontend
 public class Diagram implements IDiagram {
-    private List<Queue> queues= new ArrayList<>();
+    private List<Queue> queues = new ArrayList<>();
     private List<Machine> machines = new ArrayList<>();
     private List<Product> productsList;
-    private List<connection> machinesIn= new ArrayList<>();
-    private List<connection> machinesOut= new ArrayList<>();
+    private List<Connection> machinesIn = new ArrayList<>();
+    private List<Connection> machinesOut = new ArrayList<>();
 
-    public List<connection> getMachinesIn() {
+    public List<Connection> getMachinesIn() {
         return machinesIn;
     }
 
-    public List<connection> getMachinesOut() {
+    public List<Connection> getMachinesOut() {
         return machinesOut;
     }
     /*
@@ -50,20 +49,18 @@ public class Diagram implements IDiagram {
     }
 
     @Override
-    public void removeMachine(Machine m) {
-        for (connection c: machinesOut){
-            if (c.getP1().toString().equals(m.getLocation().toString())){
+    public void removeMachine(long m) {
+        for (Connection c : machinesOut) {
+            if (c.getID1() == m) {
                 machinesOut.remove(c);
                 break;
             }
         }
-        for (connection c: machinesIn){
-            if (c.getP2().toString().equals(m.getLocation().toString())){
-                machinesOut.remove(c);
-            }
+        for (Connection c : machinesIn) {
+            c.getID2().remove(m);
         }
-        for(Machine mach: machines){
-            if (m.getID()== mach.getID()){
+        for (Machine mach : machines) {
+            if (m == mach.getID()) {
                 machines.remove(mach);
                 break;
             }
@@ -71,19 +68,17 @@ public class Diagram implements IDiagram {
     }
 
     @Override
-    public void removeQueue(Queue q) {
-        for (connection c: machinesOut){
-            if (c.getP2().toString().equals(q.getLocation().toString())){
+    public void removeQueue(long q) {
+        for (Connection c : machinesOut) {
+            c.getID2().remove(q);
+        }
+        for (Connection c : machinesIn) {
+            if (c.getID1() == q) {
                 machinesOut.remove(c);
             }
         }
-        for (connection c: machinesIn){
-            if (c.getP1().toString().equals(q.getLocation().toString())){
-                machinesOut.remove(c);
-            }
-        }
-        for(Queue qu: queues){
-            if (q.getID()== qu.getID()){
+        for (Queue qu : queues) {
+            if (q == qu.getID()) {
                 machines.remove(qu);
                 break;
             }
@@ -91,19 +86,29 @@ public class Diagram implements IDiagram {
     }
 
     @Override
-    public void connect(Machine m, Queue q) {
-        for (connection c : machinesOut){
-            if(c.getP1().toString().equals(m.getLocation().toString())){
+    public void connectMtoQ(long m, long q) {
+        for (Connection c : machinesOut) {
+            if (c.getID1() == m) {
                 return;
             }
         }
-        connection con = new connection(m.getLocation(),m.getID(),q.getLocation(),q.getID());
+        Connection con = new Connection(m, q);
         machinesOut.add(con);
     }
 
     @Override
-    public void connect(Queue q, Machine m) {
-        connection con = new connection(q.getLocation(),q.getID(), m.getLocation(),m.getID());
+    public void connectQtoM(long q, long m) {
+        for (Connection c : machinesIn) {
+            if (c.getID1() == q) {
+                for (long target : c.getID2()) {
+                    if (m == target)
+                        return;
+                }
+                c.getID2().add(m);
+                return;
+            }
+        }
+        Connection con = new Connection(q, m);
         machinesIn.add(con);
     }
 

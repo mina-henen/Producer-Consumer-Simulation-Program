@@ -1,23 +1,21 @@
 package backend.modelClasses.concreteClasses;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import backend.modelClasses.interfaces.IMachine;
 
 public class Machine implements Runnable {
     private Point location;
     private int serviceTime;
-    private List<Integer> inputQues;
-    private int outputQue;
+    private List<Queue> inputQues;
+    private Queue outputQue;
     private int currProduct;
-    private int color;
     private long ID;
 
-    public Machine(int out) {
+    public Machine(Point location) {
+        this.location = location;
+        ID = System.currentTimeMillis();
         serviceTime = ((int) Math.random() % 15 + 2) * Global.unitTime;
-        outputQue = out;
+        outputQue = null;
         currProduct = -1;
         inputQues = new ArrayList<>();
     }
@@ -34,15 +32,19 @@ public class Machine implements Runnable {
         currProduct = curr;
     }
 
-    public int getOutputQue() {
+    public Queue getOutputQue() {
         return outputQue;
     }
 
-    public void setinputQues(List<Integer> in) {
+    public void setOutputQue(Queue q) {
+        outputQue = q;
+    }
+
+    public void setinputQues(List<Queue> in) {
         inputQues = in;
     }
 
-    public List<Integer> getinputQue() {
+    public List<Queue> getinputQue() {
         return inputQues;
     }
 
@@ -50,60 +52,9 @@ public class Machine implements Runnable {
         return serviceTime;
     }
 
-    private Point center;
-    private String colour;
-    private double rate;
-    private double id;
-
-    public Machine(Point location) {
-        this.location = location;
-        ID = System.currentTimeMillis();
-    }
-
     @Override
     public String toString() {
-        return "Machine{" +
-                "location=" + location.toString() +
-                '}';
-    }
-
-    public Machine(Point center, String colour, double rate, double id) {
-        this.center = center;
-        this.colour = colour;
-        this.rate = rate;
-        this.id = id;
-    }
-
-    public Point getCenter() {
-        return center;
-    }
-
-    public void setCenter(Point center) {
-        this.center = center;
-    }
-
-    public String getColour() {
-        return colour;
-    }
-
-    public void setColour(String colour) {
-        this.colour = colour;
-    }
-
-    public double getRate() {
-        return rate;
-    }
-
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
-
-    public double getId() {
-        return id;
-    }
-
-    public void setId(double id) {
-        this.id = id;
+        return "Machine{" + "location=" + location.toString() + '}';
     }
 
     public Point getLocation() {
@@ -114,35 +65,24 @@ public class Machine implements Runnable {
         location = p;
     }
 
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int colour) {
-        this.color = colour;
-    }
-
     @Override
     public void run() {
-        Diagram diagram = Diagram.getInstance();
         try {
-            for (int q : inputQues) {
-                Queue input = diagram.getQueues().get(q);
-                if (input.productsSize() > 0) {
-                    currProduct = input.getItem();
-                    color = diagram.getProductsList().get(currProduct).getColor();
-                    Thread.sleep(serviceTime);
-                    Queue output = diagram.getQueues().get(outputQue);
-                    output.addItem(currProduct);
-                    if (output.productsSize() == 1) {
-                        // observer
-                        // open new thread
+            boolean flag = true;
+            while (true) {
+                for (Queue input : inputQues) {
+                    while (input.productsSize() > 0) {
+                        flag = false;
+                        currProduct = input.getItem();
+                        Thread.sleep(serviceTime);
+                        outputQue.addItem(currProduct);
                     }
                 }
+                currProduct = -1;
+                if (flag)
+                    break;
             }
         } catch (Exception e) {
         }
-        currProduct = -1;
-        color = Global.defualtColor;
     }
 }

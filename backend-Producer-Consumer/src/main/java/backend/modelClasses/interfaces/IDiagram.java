@@ -11,13 +11,13 @@ public interface IDiagram {
 
     void addQueue(Queue q);
 
-    void removeMachine(Machine m);
+    void removeMachine(long m);
 
-    void removeQueue(Queue q);
+    void removeQueue(long q);
 
-    void connect(Machine m, Queue q);
+    void connectMtoQ(long m, long q);
 
-    void connect(Queue q, Machine m);
+    void connectQtoM(long q, long m);
 
     List<Queue> getQueues();
 
@@ -26,6 +26,5 @@ public interface IDiagram {
     List<Machine> getMachines();
 
     void setMachines(List<Machine> machines);
-
 
 }

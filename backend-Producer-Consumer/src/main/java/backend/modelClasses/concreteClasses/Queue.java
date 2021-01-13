@@ -6,34 +6,29 @@ import java.util.List;
 public class Queue {
     private Point location;
     private List<Integer> products;
-    private List<Integer> machines;
+    private List<Machine> machines;
     private long ID;
-
 
     public Queue(Point location) {
         this.location = location;
         ID = System.currentTimeMillis();
+        machines = new ArrayList<>();
+        products = new ArrayList<>();
     }
 
     @Override
     public String toString() {
-        return "Queue{" +
-                "location=" + location.toString() +
-                '}';
+        return "Queue{" + "location=" + location.toString() + '}';
     }
 
     public long getID() {
         return ID;
     }
 
-    public Queue(List<Integer> m) {
-        machines = m;
-        products = new ArrayList<>();
-    }
-
     public void addItem(int item) {
         products.add(item);
-        /// observer
+        QueueObserver queueObserver = new QueueObserver();
+        queueObserver.observer(this);
     }
 
     public int getItem() {
@@ -47,8 +42,12 @@ public class Queue {
         return products.size();
     }
 
-    public List<Integer> getMachinesList() {
+    public List<Machine> getMachinesList() {
         return machines;
+    }
+
+    public void setMachinesList(List<Machine> m) {
+        machines = m;
     }
 
     public Point getLocation() {
@@ -57,5 +56,9 @@ public class Queue {
 
     public void setLocation(Point p) {
         location = p;
+    }
+
+    public void setProductsList(List<Integer> p) {
+        products = p;
     }
 }
