@@ -23,7 +23,6 @@ public class HomeController {
         System.out.println(point.toString());
         Diagram diagram = Diagram.getInstance();
         diagram.addQueue(new Queue(point));
-
         return diagram;
     }
 
@@ -31,36 +30,60 @@ public class HomeController {
     public Diagram removeMachine(@RequestBody String ID) {
         Diagram diagram = Diagram.getInstance();
         diagram.removeMachine(Long.valueOf(ID.substring(0,12)));
-
         return diagram;
-
     }
 
     @PostMapping("/remove/queue/")
     public Diagram removeQueue(@RequestBody String ID) {
         Diagram diagram = Diagram.getInstance();
         diagram.removeQueue(Long.valueOf(ID.substring(0,12)));
-
         return diagram;
-
     }
 
     @PostMapping("/connect/machine/queue/")
-    public Diagram connectMToQ(@RequestBody Connection connection) {
+    public Diagram connectMToQ(@RequestBody connectionBody connection) {
         Diagram diagram = Diagram.getInstance();
-        for (int i = 0; i < connection.getID2().size(); i++) {
-            diagram.connectMtoQ(connection.getID1(), connection.getID2().get(i));
+        long mach = Long.valueOf(connection.getId1());
+        long que = Long.valueOf(connection.getId2());
+        diagram.connectMtoQ(mach,que);
+        Machine c1 = null;
+        Queue c2 = null;
+        for (Machine m:diagram.getMachines()){
+            if (m.getID()==mach){
+                c1=m;
+            }
         }
+        for (Queue q:diagram.getQueues()){
+            if (q.getID()==que){
+                c2=q;
+            }
+        }
+        diagram.connect(c1,c2);
+
         return diagram;
     }
 
 
     @PostMapping("/connect/queue/machine/")
-    public Diagram connectQToM(@RequestBody Connection connection) {
+    public Diagram connectQToM(@RequestBody connectionBody connection) {
         Diagram diagram = Diagram.getInstance();
-        for (int i = 0; i < connection.getID2().size(); i++) {
-            diagram.connectQtoM(connection.getID2().get(i), connection.getID1());
+        long que = Long.valueOf(connection.getId1());
+        long mach = Long.valueOf(connection.getId2());
+        diagram.connectQtoM(que,mach);
+        Machine c1 = null;
+        Queue c2 = null;
+        for (Machine m:diagram.getMachines()){
+            if (m.getID()==mach){
+                c1=m;
+            }
         }
+        for (Queue q:diagram.getQueues()){
+            if (q.getID()==que){
+                c2=q;
+            }
+        }
+        diagram.connect(c2,c1);
+
         return diagram;
     }
 

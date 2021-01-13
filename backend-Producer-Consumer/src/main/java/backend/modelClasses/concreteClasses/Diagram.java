@@ -12,6 +12,8 @@ public class Diagram implements IDiagram {
     private List<Product> productsList;
     private List<Connection> machinesIn = new ArrayList<>();
     private List<Connection> machinesOut = new ArrayList<>();
+    private List<connectionLine> machinesInL = new ArrayList<>();
+    private List<connectionLine> machinesOutL = new ArrayList<>();
 
     public List<Connection> getMachinesIn() {
         return machinesIn;
@@ -19,6 +21,14 @@ public class Diagram implements IDiagram {
 
     public List<Connection> getMachinesOut() {
         return machinesOut;
+    }
+
+    public List<connectionLine> getMachinesInL() {
+        return machinesInL;
+    }
+
+    public List<connectionLine> getMachinesOutL() {
+        return machinesOutL;
     }
     /*
      * public Diagram(List<Queue> queues, List<Machine> machines, List<Connector>
@@ -61,6 +71,17 @@ public class Diagram implements IDiagram {
         }
         for (Machine mach : machines) {
             if (m == mach.getID()/10) {
+                for (connectionLine l: machinesOutL) {
+                    if (l.getP1().toString().equals(mach.getLocation().toString())){
+                        machinesOutL.remove(l);
+                        break;
+                    }
+                }
+                for (connectionLine l: machinesInL) {
+                    if (l.getP2().toString().equals(mach.getLocation().toString())) {
+                        machinesInL.remove(l);
+                    }
+                }
                 machines.remove(mach);
                 break;
             }
@@ -79,6 +100,16 @@ public class Diagram implements IDiagram {
         }
         for (Queue qu : queues) {
             if (q == qu.getID()/10) {
+                for (connectionLine l: machinesOutL) {
+                    if (l.getP2().toString().equals(qu.getLocation().toString())){
+                        machinesOutL.remove(l);
+                    }
+                }
+                for (connectionLine l: machinesInL) {
+                    if (l.getP1().toString().equals(qu.getLocation().toString())) {
+                        machinesInL.remove(l);
+                    }
+                }
                 queues.remove(qu);
                 break;
             }
@@ -111,7 +142,21 @@ public class Diagram implements IDiagram {
         Connection con = new Connection(q, m);
         machinesIn.add(con);
     }
+    public void connect(Machine m, Queue q) {
+        for (connectionLine c : machinesOutL){
+            if(c.getP1().toString().equals(m.getLocation().toString())){
+                machinesOutL.remove(c);
+                break;
+            }
+        }
+        connectionLine con = new connectionLine(m.getLocation(), q.getLocation());
+        machinesOutL.add(con);
+    }
 
+    public void connect(Queue q, Machine m) {
+        connectionLine con = new connectionLine(q.getLocation(), m.getLocation());
+        machinesInL.add(con);
+    }
     @Override
     public List<Queue> getQueues() {
         return queues;

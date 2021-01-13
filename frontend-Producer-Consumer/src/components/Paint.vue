@@ -9,7 +9,7 @@
         <div>
             <button class="opt" @click="addMachine()" title="Add machine">Add machine</button>
             <button class="opt" @click="addQueue" title="Add queue">Add queue</button>
-            <button class="opt" title="Connect">Connect</button>
+            <button class="opt" @click="connect" title="Connect">Connect</button>
             <button class="opt" title="disconnect">Disconnect</button>
             <button class="opt" @click="setMove" title="move" >Move</button>
             <button class="opt" @click="delet" title="delete">Delete</button>
@@ -45,7 +45,9 @@ export default {
             
             diagram: {
                 machines:[],
-                queues:[]
+                queues:[],
+                machinesInL:[],
+                machinesOutL:[]
             },
             machine: {
                 location: {
@@ -58,6 +60,10 @@ export default {
                     x: 0,
                     y:0
                 }
+            },
+            connection: {
+                id1: "",
+                id2: "",
             }
         };
     },
@@ -149,28 +155,42 @@ export default {
                     }
                     break;
                 default:
-                    /*for(var i = 0 ; i<this.diagram.machines.length; ++i){
-                    ctx.beginPath();
-                    ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
-                    ctx.closePath();
-                    if (ctx.isPointInPath(x, y))
-                    {
-                        console.log(this.diagram.machines[i].id);
-                    }
-                }*/
                     break;
             }
             this.clear();
-            // draw red conections (into machines)
-            /* 
-            some code
-            **/
+            this.operation=null;
+            this.drawBoard();
+            
+        },
+        drawBoard(){
+            this.clear();
+            // draw yellow conections (into machines)
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+            var i;
+            ctx.strokeStyle= "yellow";
+            for(i = 0 ; i<this.diagram.machinesInL.length; ++i){
+                
+                ctx.beginPath();
+                ctx.moveTo(this.diagram.machinesInL[i].p1.x,this.diagram.machinesInL[i].p1.y);
+                ctx.lineWidth =4;
+                ctx.lineTo(this.diagram.machinesInL[i].p2.x,this.diagram.machinesInL[i].p2.y);
+                ctx.stroke();
+                ctx.lineWidth =1;
+            }
 
             // draw blue connections (out of machines)
-            /*
-            some code
-            */
-
+            ctx.strokeStyle= "blue";
+            for(i = 0 ; i<this.diagram.machinesOutL.length; ++i){
+                
+                ctx.beginPath();
+                ctx.moveTo(this.diagram.machinesOutL[i].p1.x,this.diagram.machinesOutL[i].p1.y);
+                ctx.lineWidth =4;
+                ctx.lineTo(this.diagram.machinesOutL[i].p2.x,this.diagram.machinesOutL[i].p2.y);
+                ctx.stroke();
+                ctx.lineWidth =1;
+            }
+            ctx.strokeStyle= "black";
             // draw machines
             for(i = 0 ; i<this.diagram.machines.length; ++i){
                 ctx.fillStyle = '#38ff78';
@@ -194,12 +214,60 @@ export default {
                 ctx.fillText("Q"+this.qi, this.diagram.queues[i].location.x-20, this.diagram.queues[i].location.y+10);
                 this.qi++;
             }
-            console.log(this.diagram);
-            this.operation=null;
+            
             
         },
-        connect(){
-            
+        async connect(){
+            var mach;
+            var que;
+            var way = prompt("Choose the way of connection.\n1- machine to queue.\n2- queue to machine.");
+            switch(way){
+                case "1":{
+                    mach=parseInt(prompt("Enter number of the machine."));
+
+                    if(mach-1>=this.diagram.machines.length){
+                        alert("invalid machine.");
+                        return;
+                    }
+                    que= parseInt(prompt("Enter number of the queue."));
+                    
+                    if(que-1>=this.diagram.queues.length){
+                        alert("invalid queue.");
+                        return;
+                    }
+                    this.connection.id1=this.diagram.machines[mach-1].id;
+                    this.connection.id2=this.diagram.queues[que-1].id;
+                    console.log(this.connection);
+                    const response = await axios.post("http://localhost:8095/connect/machine/queue/", this.connection);
+                    this.diagram = response.data;
+                    console.log("done");
+                    console.log(this.diagram);
+                    break;
+                }   
+                case "2":{
+                    que= parseInt(prompt("Enter number of the queue."));
+                    if(que-1>=this.diagram.queues.length){
+                        alert("invalid queue.");
+                        return;
+                    }
+
+                    mach=parseInt(prompt("Enter number of the machine."));
+                    if(mach-1>=this.diagram.machines.length){
+                        alert("invalid machine.");
+                        return;
+                    }
+                    this.connection.id2=this.diagram.machines[mach-1].id;
+                    this.connection.id1=this.diagram.queues[que-1].id;
+                    console.log(this.connection);
+                    const response = await axios.post("http://localhost:8095/connect/queue/machine/", this.connection);
+                    this.diagram = response.data;
+                    break;
+                }
+                default:
+                    alert("INVALID");
+                    break;
+            }
+            this.drawBoard();         
         },
         /* clear functions */
         clear() {
