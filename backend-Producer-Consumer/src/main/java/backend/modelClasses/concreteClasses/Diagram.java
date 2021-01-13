@@ -97,13 +97,13 @@ public class Diagram implements IDiagram {
                 return;
             }
         }
-        connection con = new connection(m.getLocation(), q.getLocation());
+        connection con = new connection(m.getLocation(),m.getID(),q.getLocation(),q.getID());
         machinesOut.add(con);
     }
 
     @Override
     public void connect(Queue q, Machine m) {
-        connection con = new connection(q.getLocation(), m.getLocation());
+        connection con = new connection(q.getLocation(),q.getID(), m.getLocation(),m.getID());
         machinesIn.add(con);
     }
 
