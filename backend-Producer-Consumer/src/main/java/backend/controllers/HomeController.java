@@ -4,6 +4,8 @@ import backend.modelClasses.concreteClasses.*;
 import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @CrossOrigin
 @RestController
 public class HomeController {
@@ -113,11 +115,12 @@ public class HomeController {
     }
 
     @GetMapping("/prev/diagram/")
-    public Diagram prevDiagram() {
+    public synchronized DiagramCopy prevDiagram() {
         SnapShot snapShot = SnapShot.getInstance();
-        Diagram ne = Diagram.getInstance();
-        ne.setMachines(snapShot.replay().getMachines());
-        ne.setQueues(snapShot.replay().getQueues());
-        return ne;
+        Diagram.getInstance().setMachines(snapShot.replay().getMachines());
+        Diagram.getInstance().setQueues(snapShot.replay().getQueues());
+        Diagram.getInstance().getQueues().get(Diagram.getInstance().getQueues().size() - 1).setProductsList(new ArrayList<>());
+        DiagramCopy diagramCopy = Diagram.cloneDiagram(Diagram.getInstance());
+        return diagramCopy;
     }
 }

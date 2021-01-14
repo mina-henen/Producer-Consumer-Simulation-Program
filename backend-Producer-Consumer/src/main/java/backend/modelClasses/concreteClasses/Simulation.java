@@ -7,7 +7,7 @@ public class Simulation {
     public void startSimulation(int numberOfProducts) {
         Diagram diagram = Diagram.getInstance();
         SnapShot snapShot = SnapShot.getInstance();
-        snapShot.save(diagram);
+        snapShot.save();
         SystemBuilder systemBuilder = new SystemBuilder();
         systemBuilder.systemBuild(numberOfProducts);
         /*

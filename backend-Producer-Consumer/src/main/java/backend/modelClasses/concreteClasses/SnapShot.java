@@ -21,8 +21,8 @@ public class SnapShot {
 
     private Diagram saveDiagram;
 
-    public void save(Diagram diagram) {
-        saveDiagram = diagram;
+    public void save() {
+        saveDiagram = Diagram.getInstance();
     }
 
     public Diagram replay() {
@@ -32,7 +32,7 @@ public class SnapShot {
          * (!diagram.getQueues().get(sz - 1).getProducts().isEmpty()) {
          * diagram.getQueues().get(sz - 1).getProducts().remove(0); }
          */
-        return diagram;
+        //return diagram;
         saveDiagram.setProductsList(new ArrayList<>());
         return saveDiagram;
     }
