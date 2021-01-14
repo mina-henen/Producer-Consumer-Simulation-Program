@@ -11,6 +11,24 @@ public class Machine implements Runnable {
     private int currProduct;
     private long ID;
 
+    public Machine() {
+        location = new Point();
+        inputQues = new ArrayList<>();
+        outputQue = new Queue();
+    }
+
+    public void setServiceTime(int serviceTime) {
+        this.serviceTime = serviceTime;
+    }
+
+    public void setInputQues(List<Queue> inputQues) {
+        this.inputQues = inputQues;
+    }
+
+    public void setID(long ID) {
+        this.ID = ID;
+    }
+
     public Machine(Point location) {
         this.location = location;
         ID = System.currentTimeMillis();

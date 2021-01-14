@@ -285,21 +285,19 @@ export default {
         },
         async startSim() {
             var products = prompt("Enter number of products you need to simulate");
-            const response = await axios.post(("http://localhost:8095/start/simulation/"), {
+            await axios.post(("http://localhost:8095/start/simulation/"), {
                 numOfProducts: products
             });
-            console.log(response);
             this.updateDiagram();
         },
         async updateDiagram() {
-            for (let index = 0; index < 2; index++) {
-            const response = await axios.get("http://localhost:8095/get/updates/");
-            this.diagram = response.data;
-            console.log(this.diagram);
+            console.log("Test Update")
+            var response = await axios.get("http://localhost:8095/get/updates/");
+            this.diagram = JSON.parse(response.data);
+            console.log(response);
             this.clear();
             this.operation=null;
             this.drawBoard();
-            }
         },
         /************************************************************************ OLD CODE *********************************************************************/
         /* function to detect the selected point by mouse click using mouse event (e)*/

@@ -10,6 +10,10 @@ public class Queue {
     private long ID;
     private int productsnumber;
 
+
+    public Queue() {
+    }
+
     public Queue(Point location) {
         this.location = location;
         ID = System.currentTimeMillis();
@@ -29,6 +33,13 @@ public class Queue {
     public void addItem(int item) {
         products.add(item);
         productsnumber++;
+        if (productsnumber == 10) {
+            System.out.println("Finished");
+            System.out.println(ID);
+            System.out.println(products.toString());
+            Diagram diagram = Diagram.getInstance();
+            System.out.println(diagram.getMachinesInL().size());
+        }
         QueueObserver queueObserver = new QueueObserver();
         queueObserver.observer(this);
     }
@@ -65,4 +76,6 @@ public class Queue {
     public void setProductsList(List<Integer> p) {
         products = p;
     }
+
+
 }

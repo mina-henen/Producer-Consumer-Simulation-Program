@@ -1,5 +1,6 @@
 package backend.modelClasses.concreteClasses;
 
+import backend.controllers.DiagramCopy;
 import backend.modelClasses.interfaces.IDiagram;
 
 import java.util.ArrayList;
@@ -208,5 +209,31 @@ public class Diagram implements IDiagram {
     public static Diagram clear() {
         diagram = new Diagram();
         return diagram;
+    }
+
+    public synchronized static DiagramCopy cloneDiagram(Diagram diagram) {
+        DiagramCopy copy = new DiagramCopy();
+        for (int i = 0; i < diagram.getMachines().size(); i++) {
+            copy.getMachines().add(diagram.getMachines().get(i));
+        }
+        for (int i = 0; i < diagram.getQueues().size(); i++) {
+            copy.getQueues().add(diagram.getQueues().get(i));
+        }
+        for (int i = 0; i < diagram.getMachinesIn().size(); i++) {
+            copy.getMachinesIn().add(diagram.getMachinesIn().get(i));
+        }
+        for (int i = 0; i < diagram.getMachinesOut().size(); i++) {
+            copy.getMachinesOut().add(diagram.getMachinesOut().get(i));
+        }
+        for (int i = 0; i < diagram.getProductsList().size(); i++) {
+            copy.getProductsList().add(diagram.getProductsList().get(i));
+        }
+        for (int i = 0; i < diagram.getMachinesInL().size(); i++) {
+            copy.getMachinesInL().add(diagram.getMachinesInL().get(i));
+        }
+        for (int i = 0; i < diagram.getMachinesOutL().size(); i++) {
+            copy.getMachinesOutL().add(diagram.getMachinesOutL().get(i));
+        }
+        return copy;
     }
 }

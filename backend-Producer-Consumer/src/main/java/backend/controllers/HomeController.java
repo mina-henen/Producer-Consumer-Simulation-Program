@@ -1,6 +1,7 @@
 package backend.controllers;
 
 import backend.modelClasses.concreteClasses.*;
+import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -87,9 +88,13 @@ public class HomeController {
     }
 
     @GetMapping("/get/updates/")
-    public Diagram getUpdates() {
-        Diagram diagram = Diagram.getInstance();
-        return diagram;
+    public synchronized String getUpdates() {
+        DiagramCopy diagramCopy = Diagram.cloneDiagram(Diagram.getInstance());
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(diagramCopy));
+        String ret = gson.toJson(diagramCopy);
+        System.out.println(ret);
+        return ret;
     }
 
     @PostMapping("/start/simulation/")

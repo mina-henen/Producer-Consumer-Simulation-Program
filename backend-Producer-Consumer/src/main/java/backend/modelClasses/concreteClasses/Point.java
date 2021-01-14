@@ -9,7 +9,10 @@ public class Point {
             this.y = y;
         }
 
-        public int getX() {
+    public Point() {
+    }
+
+    public int getX() {
             return x;
         }
 
