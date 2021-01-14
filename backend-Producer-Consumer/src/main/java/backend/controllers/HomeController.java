@@ -91,11 +91,13 @@ public class HomeController {
         Diagram diagram = Diagram.getInstance();
         return diagram;
     }
-    /*
-    @GetMapping("/start/simulation/")
-    public void startSimulation() {
-        Simulation.startSimulation();
-    }*/
+
+    @PostMapping("/start/simulation/")
+    public void startSimulation(@RequestBody NumOfProducts numOfProducts) {
+        System.out.println(numOfProducts.getNumOfProducts());
+        Simulation simulation = new Simulation();
+        simulation.startSimulation(numOfProducts.getNumOfProducts());
+    }
 
     @GetMapping("/clear/")
     public void clear() {
