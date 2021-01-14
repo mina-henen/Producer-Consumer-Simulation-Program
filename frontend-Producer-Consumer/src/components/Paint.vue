@@ -221,6 +221,7 @@ export default {
                     ctx.fillText("Q"+this.qi, this.diagram.queues[i].location.x-20, this.diagram.queues[i].location.y+10);
                 }
                 this.qi++;
+
             }
             
             
