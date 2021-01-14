@@ -162,11 +162,11 @@ export default {
         },
         drawBoard(){
             this.clear();
-            // draw yellow conections (into machines)
+            // draw green conections (into machines)
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
             var i;
-            ctx.strokeStyle= "yellow";
+            ctx.strokeStyle= "green";
             for(i = 0 ; i<this.diagram.machinesInL.length; ++i){
                 
                 ctx.beginPath();
