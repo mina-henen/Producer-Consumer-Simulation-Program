@@ -114,7 +114,10 @@ public class HomeController {
 
     @GetMapping("/prev/diagram/")
     public Diagram prevDiagram() {
-        SnapShot snapShot = new SnapShot();
-        return snapShot.replay();
+        SnapShot snapShot = SnapShot.getInstance();
+        Diagram ne = Diagram.getInstance();
+        ne.setMachines(snapShot.replay().getMachines());
+        ne.setQueues(snapShot.replay().getQueues());
+        return ne;
     }
 }

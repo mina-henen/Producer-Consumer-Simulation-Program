@@ -6,6 +6,8 @@ public class Simulation {
 
     public void startSimulation(int numberOfProducts) {
         Diagram diagram = Diagram.getInstance();
+        SnapShot snapShot = SnapShot.getInstance();
+        snapShot.save(diagram);
         SystemBuilder systemBuilder = new SystemBuilder();
         systemBuilder.systemBuild(numberOfProducts);
         /*
@@ -18,8 +20,6 @@ public class Simulation {
          * diagram.getQueues()) { if (q.getID() == target.getID()) { System.out.print(j
          * + " "); break; } j++; } System.out.println(); i++; }
          */
-        SnapShot snapShot = new SnapShot();
-        snapShot.save(diagram);
         Thread threads = new Thread(new ProductGenerator());
         threads.start();
     }
