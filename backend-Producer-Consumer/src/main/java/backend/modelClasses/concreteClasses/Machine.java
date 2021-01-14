@@ -28,7 +28,7 @@ public class Machine implements Runnable {
     public Machine(Point location) {
         this.location = location;
         ID = System.currentTimeMillis();
-        int random = (int) ((Math.random() * (10)) + 2);
+        int random = (int) ((Math.random() * (10)) + 3);
         serviceTime = (random * Global.unitTime);
         outputQue = null;
         currProduct = -1;
