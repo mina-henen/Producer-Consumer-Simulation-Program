@@ -21,7 +21,6 @@ public class Machine implements Runnable {
         this.serviceTime = serviceTime;
     }
 
-
     public void setID(long ID) {
         this.ID = ID;
     }
@@ -29,8 +28,8 @@ public class Machine implements Runnable {
     public Machine(Point location) {
         this.location = location;
         ID = System.currentTimeMillis();
-        int random = (int) ((Math.random() * (50 - 0)) + 0);
-        serviceTime = (random % 15 + 2) * Global.unitTime;
+        int random = (int) ((Math.random() * (10)) + 2);
+        serviceTime = (random * Global.unitTime);
         outputQue = null;
         currProduct = -1;
         inputQues = new ArrayList<>();
@@ -90,14 +89,12 @@ public class Machine implements Runnable {
                 for (Queue input : inputQues) {
                     while (input.productsSize() > 0) {
                         flag = false;
-                        this.currProduct = input.getItem();
-                        System.out.println(this.currProduct);
-                        Machine m = Diagram.cloneMachine(this);
+                        currProduct = input.getItem();
+                        System.out.println("MAchineId: " + this.ID % 100 + " have " + this.currProduct % 100 + "color");
                         /*
-                        System.out.println(m.getID());
-                        System.out.println(this.ID);
-                        System.out.println(m.getCurrProduct());
-                        System.out.println("this.currProduct" + this.currProduct);
+                         * System.out.println(m.getID()); System.out.println(this.ID);
+                         * System.out.println(m.getCurrProduct()); System.out.println("this.currProduct"
+                         * + this.currProduct);
                          */
                         Thread.sleep(serviceTime);
                         outputQue.addItem(currProduct);
