@@ -111,4 +111,10 @@ public class HomeController {
     public void clear() {
         Diagram diagram = Diagram.clear();
     }
+
+    @GetMapping("/prev/diagram/")
+    public Diagram prevDiagram() {
+        SnapShot snapShot = new SnapShot();
+        return snapShot.replay();
+    }
 }
