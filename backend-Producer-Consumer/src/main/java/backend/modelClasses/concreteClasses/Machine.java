@@ -90,7 +90,15 @@ public class Machine implements Runnable {
                 for (Queue input : inputQues) {
                     while (input.productsSize() > 0) {
                         flag = false;
-                        currProduct = input.getItem();
+                        this.currProduct = input.getItem();
+                        System.out.println(this.currProduct);
+                        Machine m = Diagram.cloneMachine(this);
+                        /*
+                        System.out.println(m.getID());
+                        System.out.println(this.ID);
+                        System.out.println(m.getCurrProduct());
+                        System.out.println("this.currProduct" + this.currProduct);
+                         */
                         Thread.sleep(serviceTime);
                         outputQue.addItem(currProduct);
                     }

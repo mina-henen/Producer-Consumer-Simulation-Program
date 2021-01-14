@@ -10,9 +10,10 @@
             <button class="opt" @click="addMachine()" title="Add machine">Add machine</button>
             <button class="opt" @click="addQueue" title="Add queue">Add queue</button>
             <button class="opt" @click="connect" title="Connect">Connect</button>
-            <button class="opt" title="disconnect">Disconnect</button>
+            
             <button class="opt" @click="delet" title="delete">Delete</button>
             <button class="opt" @click="clearRequest()" title="clear screen">New Diagram</button>
+            <button class="opt" title="previous">Previuos diagram</button>
         </div>
         <div>
             <button class="smiul" @click="startSim()" title="Start">Start simulation</button>
@@ -70,7 +71,6 @@ export default {
         /* mounting our canvas */
         var c = document.getElementById("myCanvas");
         this.canvas = c.getContext("2d");
-        this.start();
     },
     methods: {
         addMachine(){
@@ -277,7 +277,6 @@ export default {
             context.clearRect(0, 0, canvas.width, canvas.height);
             this.mi=1;
             this.qi=1;
-            this.start();
         },
         async clearRequest() {
             const response = await axios.get("http://localhost:8095/clear/");
