@@ -10,6 +10,25 @@ public class Queue {
     private long ID;
     private int productsnumber;
 
+    public List<Integer> getProducts() {
+        return products;
+    }
+
+    public List<Machine> getMachines() {
+        return machines;
+    }
+
+    public int getProductsnumber() {
+        return productsnumber;
+    }
+
+    public void setID(long ID) {
+        this.ID = ID;
+    }
+
+    public void setProductsnumber(int productsnumber) {
+        this.productsnumber = productsnumber;
+    }
 
     public Queue() {
     }

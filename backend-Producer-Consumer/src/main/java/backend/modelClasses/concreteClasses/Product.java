@@ -16,4 +16,12 @@ public class Product {
     public int getstartTime() {
         return startTime;
     }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 }

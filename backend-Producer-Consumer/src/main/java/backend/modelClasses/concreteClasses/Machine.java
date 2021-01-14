@@ -21,9 +21,6 @@ public class Machine implements Runnable {
         this.serviceTime = serviceTime;
     }
 
-    public void setInputQues(List<Queue> inputQues) {
-        this.inputQues = inputQues;
-    }
 
     public void setID(long ID) {
         this.ID = ID;
@@ -58,7 +55,7 @@ public class Machine implements Runnable {
         outputQue = q;
     }
 
-    public void setinputQues(List<Queue> in) {
+    public void setInputQues(List<Queue> in) {
         inputQues = in;
     }
 

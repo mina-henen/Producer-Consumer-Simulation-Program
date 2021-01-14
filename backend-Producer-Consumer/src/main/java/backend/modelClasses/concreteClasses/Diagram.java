@@ -211,13 +211,71 @@ public class Diagram implements IDiagram {
         return diagram;
     }
 
+
+    public synchronized static Queue cloneQueue(Queue queue) {
+        Queue q = new Queue();
+        q.setLocation(new Point(queue.getLocation().getX(), queue.getLocation().getY()));
+        q.setID(queue.getID());
+        q.setProductsnumber(queue.getProductsnumber());
+        List<Integer> products = new ArrayList<>();
+        List<Machine> machines = new ArrayList<>();
+        for (int i = 0; i < queue.getMachines().size(); i++) {
+            Machine m = Diagram.cloneMachine(queue.getMachines().get(i));
+            machines.add(m);
+        }
+        for (int i = 0; i < queue.getProducts().size(); i++) {
+            int m = queue.getProducts().get(i);
+            products.add(m);
+        }
+        q.setProductsList(products);
+        q.setMachinesList(machines);
+        return q;
+    }
+
+    public synchronized static Machine cloneMachine(Machine machine) {
+        Machine m = new Machine();
+        m.setLocation(new Point(machine.getLocation().getX(), machine.getLocation().getY()));
+        m.setID(machine.getID());
+        m.setServiceTime(machine.getServiceTime());
+        m.setCurrProduct(machine.getCurrProduct());
+        for (int i = 0; i < machine.getinputQue().size(); i++) {
+            Queue q = Diagram.cloneQueue(machine.getinputQue().get(i));
+            m.getinputQue().add(q);
+        }
+        Queue q = Diagram.cloneQueue(machine.getOutputQue());
+        m.setOutputQue(q);
+        return m;
+    }
+
+    public synchronized static Product cloneProduct(Product product) {
+        Product p = new Product();
+        p.setColor(product.getColor());
+        p.setStartTime(product.getstartTime());
+        return p;
+    }
+    /*public synchronized static Connection cloneConnection(Machine machine) {
+        Machine m = new Machine();
+        m.setLocation(new Point(machine.getLocation().getX(), machine.getLocation().getY()));
+        m.setID(machine.getID());
+        m.setServiceTime(machine.getServiceTime());
+        m.setCurrProduct(machine.getCurrProduct());
+        for (int i = 0; i < machine.getinputQue().size(); i++) {
+            Queue q = Diagram.cloneQueue(machine.getinputQue().get(i));
+            m.getinputQue().add(q);
+        }
+        Queue q = Diagram.cloneQueue(machine.getOutputQue());
+        m.setOutputQue(q);
+        return m;
+    }
+    */
+
     public synchronized static DiagramCopy cloneDiagram(Diagram diagram) {
         DiagramCopy copy = new DiagramCopy();
         for (int i = 0; i < diagram.getMachines().size(); i++) {
-            copy.getMachines().add(diagram.getMachines().get(i));
+            copy.getMachines().add(Diagram.cloneMachine(diagram.getMachines().get(i)));
         }
         for (int i = 0; i < diagram.getQueues().size(); i++) {
-            copy.getQueues().add(diagram.getQueues().get(i));
+            copy.getQueues().add(Diagram.cloneQueue(diagram.getQueues().get(i)));
         }
         for (int i = 0; i < diagram.getMachinesIn().size(); i++) {
             copy.getMachinesIn().add(diagram.getMachinesIn().get(i));
@@ -226,7 +284,7 @@ public class Diagram implements IDiagram {
             copy.getMachinesOut().add(diagram.getMachinesOut().get(i));
         }
         for (int i = 0; i < diagram.getProductsList().size(); i++) {
-            copy.getProductsList().add(diagram.getProductsList().get(i));
+            copy.getProductsList().add(Diagram.cloneProduct(diagram.getProductsList().get(i)));
         }
         for (int i = 0; i < diagram.getMachinesInL().size(); i++) {
             copy.getMachinesInL().add(diagram.getMachinesInL().get(i));
