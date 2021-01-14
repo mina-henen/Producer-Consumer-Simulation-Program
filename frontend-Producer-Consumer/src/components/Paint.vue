@@ -192,7 +192,9 @@ export default {
             ctx.strokeStyle= "black";
             // draw machines
             for(i = 0 ; i<this.diagram.machines.length; ++i){
-                ctx.fillStyle = '#38ff78';
+                this.diagram.machines[i].currProduct = 898050;
+                console.log('#' + this.diagram.machines[i].currProduct.toString());
+                ctx.fillStyle = '#' + this.diagram.machines[i].currProduct.toString();
                 ctx.beginPath();
                 ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
                 ctx.fill();

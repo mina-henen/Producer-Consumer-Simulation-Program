@@ -212,7 +212,7 @@ public class Diagram implements IDiagram {
     }
 
 
-    public synchronized static Queue cloneQueue(Queue queue) {
+    public static Queue cloneQueue(Queue queue) {
         Queue q = new Queue();
         q.setLocation(new Point(queue.getLocation().getX(), queue.getLocation().getY()));
         q.setID(queue.getID());
@@ -234,7 +234,7 @@ public class Diagram implements IDiagram {
         return q;
     }
 
-    public synchronized static Machine cloneMachine(Machine machine) {
+    public static Machine cloneMachine(Machine machine) {
         Machine m = new Machine();
         m.setLocation(new Point(machine.getLocation().getX(), machine.getLocation().getY()));
         m.setID(machine.getID());
@@ -249,7 +249,7 @@ public class Diagram implements IDiagram {
         return m;
     }
 
-    public synchronized static Product cloneProduct(Product product) {
+    public static Product cloneProduct(Product product) {
         Product p = new Product();
         p.setColor(product.getColor());
         p.setStartTime(product.getstartTime());
@@ -271,7 +271,7 @@ public class Diagram implements IDiagram {
     }
     */
 
-    public synchronized static DiagramCopy cloneDiagram(Diagram diagram) {
+    public static DiagramCopy cloneDiagram(Diagram diagram) {
         DiagramCopy copy = new DiagramCopy();
         for (int i = 0; i < diagram.getMachines().size(); i++) {
             copy.getMachines().add(Diagram.cloneMachine(diagram.getMachines().get(i)));

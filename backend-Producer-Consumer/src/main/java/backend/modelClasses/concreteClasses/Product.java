@@ -7,8 +7,8 @@ public class Product {
     public Product() {
         int random = (int) ((Math.random() * (50 - 0)) + 0);
         startTime = (random % 15 + 2) * Global.unitTime;
-        random = (int) ((Math.random() * (50 - 0)) + 0);
-        color = (random % 0xFFFFF0) + 0x00000A;
+        random = (int) ((Math.random() * (899999 - 100000)) + 100000);
+        color = (random + 100000);
     }
 
     public int getColor() {
