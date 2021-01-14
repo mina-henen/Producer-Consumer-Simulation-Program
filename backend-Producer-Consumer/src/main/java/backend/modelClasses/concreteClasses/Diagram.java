@@ -218,17 +218,19 @@ public class Diagram implements IDiagram {
         q.setID(queue.getID());
         q.setProductsnumber(queue.getProductsnumber());
         List<Integer> products = new ArrayList<>();
+        /*
         List<Machine> machines = new ArrayList<>();
         for (int i = 0; i < queue.getMachines().size(); i++) {
             Machine m = Diagram.cloneMachine(queue.getMachines().get(i));
             machines.add(m);
         }
+        */
         for (int i = 0; i < queue.getProducts().size(); i++) {
             int m = queue.getProducts().get(i);
             products.add(m);
         }
         q.setProductsList(products);
-        q.setMachinesList(machines);
+        //q.setMachinesList(machines);
         return q;
     }
 

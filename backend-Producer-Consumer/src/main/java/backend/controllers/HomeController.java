@@ -88,13 +88,15 @@ public class HomeController {
     }
 
     @GetMapping("/get/updates/")
-    public synchronized String getUpdates() {
+    public synchronized DiagramCopy getUpdates() {
         DiagramCopy diagramCopy = Diagram.cloneDiagram(Diagram.getInstance());
+        /*
         Gson gson = new Gson();
         System.out.println(gson.toJson(diagramCopy));
         String ret = gson.toJson(diagramCopy);
         System.out.println(ret);
-        return ret;
+        */
+        return diagramCopy;
     }
 
     @PostMapping("/start/simulation/")
