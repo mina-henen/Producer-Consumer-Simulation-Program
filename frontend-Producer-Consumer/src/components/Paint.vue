@@ -214,7 +214,12 @@ export default {
                 ctx.strokeRect(this.diagram.queues[i].location.x-40,this.diagram.queues[i].location.y-25,80,50);
                 ctx.fillStyle = "black";
                 ctx.font = "30px Arial";
-                ctx.fillText("Q"+this.qi, this.diagram.queues[i].location.x-20, this.diagram.queues[i].location.y+10);
+                if(this.diagram.queues[i].products.length>0){
+                    ctx.fillText(this.diagram.queues[i].products.length.toString(), this.diagram.queues[i].location.x-20, this.diagram.queues[i].location.y+10);
+                }
+                else{
+                    ctx.fillText("Q"+this.qi, this.diagram.queues[i].location.x-20, this.diagram.queues[i].location.y+10);
+                }
                 this.qi++;
             }
             
