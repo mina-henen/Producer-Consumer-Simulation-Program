@@ -3,6 +3,8 @@ package backend.modelClasses.concreteClasses;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.plugins.tiff.GeoTIFFTagSet;
+
 public class SnapShot {
     private Diagram saveDiagram;
 
@@ -11,11 +13,12 @@ public class SnapShot {
     }
 
     public Diagram replay() {
-        int sz = saveDiagram.getQueues().size();
-        saveDiagram.getQueues().get(sz - 1).setProductsnumber(0);
-        while (saveDiagram.getQueues().get(sz - 1).getProducts().size() > 0) {
-            saveDiagram.getQueues().get(sz - 1).getProducts().remove(0);
+        Diagram diagram = Diagram.getInstance();
+        int sz = diagram.getQueues().size();
+        diagram.getQueues().get(sz - 1).setProductsnumber(0);
+        while (!diagram.getQueues().get(sz - 1).getProducts().isEmpty()) {
+            diagram.getQueues().get(sz - 1).getProducts().remove(0);
         }
-        return saveDiagram;
+        return diagram;
     }
 }
