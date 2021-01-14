@@ -15,7 +15,7 @@ public class main {
                 j--;
         }
         for (Machine m : diagram.getMachines()) {
-            System.out.println(m.getID() % 100);
+            System.out.println(m.getID());
         }
         for (int i = 0; i < 3; ++i) {
             diagram.addQueue(new Queue(new Point(i * 2, i * 2)));
@@ -24,7 +24,7 @@ public class main {
                 j--;
         }
         for (Queue q : diagram.getQueues()) {
-            System.out.println(q.getID() % 100);
+            System.out.println(q.getID());
         }
         diagram.connectQtoM(diagram.getQueues().get(0).getID(), diagram.getMachines().get(0).getID());
         // diagram.connect(diagram.getQueues().get(0), diagram.getMachines().get(0));

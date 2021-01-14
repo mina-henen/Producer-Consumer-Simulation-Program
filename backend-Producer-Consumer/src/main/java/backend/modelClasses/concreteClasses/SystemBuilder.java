@@ -71,6 +71,7 @@ public class SystemBuilder {
         List<Product> temp = new ArrayList<>(numberOfProducts);
         for (int i = 0; i < numberOfProducts; i++) {
             temp.add(new Product());
+            System.out.println(temp.get(i).getColor());
         }
         diagram.setProductsList(temp);
     }
