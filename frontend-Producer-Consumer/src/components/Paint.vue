@@ -292,16 +292,14 @@ export default {
             });
             this.updateDiagram();
         },
-        async updateDiagram() {
-            for (let index = 0; index < 4; index++) {
-                console.log("Test Update")
+        async updateDiagram() {                
+                setTimeout(async()=>{ console.log("Test Update")
                 var response = await axios.get("http://localhost:8095/get/updates/");
                 this.diagram = (response.data);
                 console.log(this.diagram);
                 this.clear();
                 this.operation=null;
-                this.drawBoard();
-            }
+                this.drawBoard(); }, 1000);
             
         },
         /************************************************************************ OLD CODE *********************************************************************/

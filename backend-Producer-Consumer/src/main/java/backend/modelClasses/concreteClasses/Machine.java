@@ -31,8 +31,8 @@ public class Machine implements Runnable {
     public Machine(Point location) {
         this.location = location;
         ID = System.currentTimeMillis();
-        int random = (int) ((Math.random() * (50 - 0)) + 0);
-        serviceTime = (random % 15 + 2) * Global.unitTime;
+        int random = (int) ((Math.random() * (10)) + 0);
+        serviceTime = (random * 1000);
         outputQue = null;
         currProduct = -1;
         inputQues = new ArrayList<>();
@@ -86,16 +86,13 @@ public class Machine implements Runnable {
     @Override
     public void run() {
         try {
-            boolean flag = true;
+            boolean flag;
             while (true) {
                 flag = true;
                 for (Queue input : inputQues) {
                     while (input.productsSize() > 0) {
                         flag = false;
-                        System.out.println(input.getItem());
-                        this.currProduct = input.getItem();
-                        System.out.println(this.currProduct);
-                        Machine m = Diagram.cloneMachine(this);
+                        currProduct = input.getItem();
                         /*
                         System.out.println(m.getID());
                         System.out.println(this.ID);
