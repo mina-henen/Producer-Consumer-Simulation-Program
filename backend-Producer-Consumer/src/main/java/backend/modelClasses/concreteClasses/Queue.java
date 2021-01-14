@@ -8,6 +8,7 @@ public class Queue {
     private List<Integer> products;
     private List<Machine> machines;
     private long ID;
+    private int productsnumber;
 
     public Queue(Point location) {
         this.location = location;
@@ -27,19 +28,22 @@ public class Queue {
 
     public void addItem(int item) {
         products.add(item);
+        productsnumber++;
         QueueObserver queueObserver = new QueueObserver();
         queueObserver.observer(this);
     }
 
     public int getItem() {
         if (productsSize() > 0) {
-            return products.remove(0);
+            int temp = products.remove(0);
+            productsnumber--;
+            return temp;
         }
         return -1;
     }
 
     public int productsSize() {
-        return products.size();
+        return productsnumber;
     }
 
     public List<Machine> getMachinesList() {

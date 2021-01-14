@@ -70,9 +70,9 @@ public class Diagram implements IDiagram {
             c.getID2().remove(m);
         }
         for (Machine mach : machines) {
-            if (m == mach.getID()/10) {
-                for (connectionLine l: machinesOutL) {
-                    if (l.getP1().toString().equals(mach.getLocation().toString())){
+            if (m == mach.getID() / 10) {
+                for (connectionLine l : machinesOutL) {
+                    if (l.getP1().toString().equals(mach.getLocation().toString())) {
                         machinesOutL.remove(l);
                         break;
                     }
@@ -101,9 +101,9 @@ public class Diagram implements IDiagram {
             }
         }
         for (Queue qu : queues) {
-            if (q == qu.getID()/10) {
-                for (connectionLine l: machinesOutL) {
-                    if (l.getP2().toString().equals(qu.getLocation().toString())){
+            if (q == qu.getID() / 10) {
+                for (connectionLine l : machinesOutL) {
+                    if (l.getP2().toString().equals(qu.getLocation().toString())) {
                         machinesOutL.remove(l);
                     }
                 }
@@ -127,12 +127,26 @@ public class Diagram implements IDiagram {
                 return;
             }
         }
+        for (Connection c : machinesIn) {
+            if (c.getID1() == q) {
+                if (c.getID2().indexOf(m) != -1) {
+                    return;
+                }
+            }
+        }
         Connection con = new Connection(m, q);
         machinesOut.add(con);
     }
 
     @Override
     public void connectQtoM(long q, long m) {
+        for (Connection c : machinesOut) {
+            if (c.getID1() == m) {
+                if (c.getID2().indexOf(q) != -1) {
+                    return;
+                }
+            }
+        }
         for (Connection c : machinesIn) {
             if (c.getID1() == q) {
                 for (long target : c.getID2()) {
@@ -146,9 +160,10 @@ public class Diagram implements IDiagram {
         Connection con = new Connection(q, m);
         machinesIn.add(con);
     }
+
     public void connect(Machine m, Queue q) {
-        for (connectionLine c : machinesOutL){
-            if(c.getP1().toString().equals(m.getLocation().toString())){
+        for (connectionLine c : machinesOutL) {
+            if (c.getP1().toString().equals(m.getLocation().toString())) {
                 machinesOutL.remove(c);
                 break;
             }
@@ -161,6 +176,7 @@ public class Diagram implements IDiagram {
         connectionLine con = new connectionLine(q.getLocation(), m.getLocation());
         machinesInL.add(con);
     }
+
     @Override
     public List<Queue> getQueues() {
         return queues;
