@@ -1,7 +1,5 @@
 package backend.modelClasses.concreteClasses;
 
-import backend.controllers.DiagramCopy;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +83,7 @@ public class Machine implements Runnable {
     @Override
     public void run() {
         try {
-            boolean flag;
+            boolean flag = true;
             while (true) {
                 flag = true;
                 for (Queue input : inputQues) {
