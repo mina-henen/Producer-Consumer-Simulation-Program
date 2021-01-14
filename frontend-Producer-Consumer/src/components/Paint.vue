@@ -12,7 +12,7 @@
             <button class="opt" @click="connect" title="Connect">Connect</button>
             <button class="opt" @click="delet" title="delete">Delete</button>
             <button class="opt" @click="clearRequest()" title="clear screen">New Diagram</button>
-            <button class="opt" title="previous">Previous diagram</button>
+            <button class="opt" @click="loadPrev()" title="previous">Previous diagram</button>
         </div>
         <div>
             <button class="smiul" @click="startSim()" title="Start">Start simulation</button>
@@ -41,7 +41,7 @@ export default {
             operation: null,
             mi:1,
             qi:1,
-            
+            productsNum: "",
             diagram: {
                 machines:[],
                 queues:[],
@@ -109,7 +109,7 @@ export default {
                 case "ADD MACHINE":{
                     this.machine.location.x = x;
                     this.machine.location.y = y;
-                    console.log(this.machine.location);
+                    //console.log(this.machine.location);
                     const response = await axios.post("http://localhost:8095/add/machine/", this.machine.location);
                     this.diagram = response.data;
                            
@@ -120,7 +120,7 @@ export default {
                     {
                     this.queue.location.x = x;
                     this.queue.location.y = y;
-                    console.log(this.queue);
+                    //console.log(this.queue);
                     const response = await axios.post("http://localhost:8095/add/queue/", this.queue.location);
                     this.diagram = response.data;
                     
@@ -134,7 +134,7 @@ export default {
                     ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
                     ctx.closePath();
                     if (ctx.isPointInPath(x, y)){
-                        console.log(this.diagram.machines[i].id);
+                        //console.log(this.diagram.machines[i].id);
                         const response = await axios.post("http://localhost:8095/remove/machine/", this.diagram.machines[i].id);
                         this.diagram = response.data;
                         break;
@@ -145,7 +145,7 @@ export default {
                     ctx.rect(this.diagram.queues[i].location.x-40,this.diagram.queues[i].location.y-25,80,50);
                     ctx.closePath();
                     if (ctx.isPointInPath(x, y)){
-                        console.log(this.diagram.queues[i].id);
+                        //console.log(this.diagram.queues[i].id);
                         const response = await axios.post("http://localhost:8095/remove/queue/", this.diagram.queues[i].id);
                         this.diagram = response.data;
                         break;
@@ -191,9 +191,9 @@ export default {
             ctx.strokeStyle= "black";
             // draw machines
             for(i = 0 ; i<this.diagram.machines.length; ++i){
-                console.log(this.diagram);
+                //console.log(this.diagram);
                 if(this.diagram.machines[i].currProduct == -1) {
-                ctx.fillStyle = "green";        
+                ctx.fillStyle = "white";        
                 } else{
                 ctx.fillStyle = '#' + this.diagram.machines[i].currProduct.toString();
                 }
@@ -240,11 +240,11 @@ export default {
                     }
                     this.connection.id1=this.diagram.machines[mach-1].id;
                     this.connection.id2=this.diagram.queues[que-1].id;
-                    console.log(this.connection);
+                    //console.log(this.connection);
                     const response = await axios.post("http://localhost:8095/connect/machine/queue/", this.connection);
                     this.diagram = response.data;
-                    console.log("done");
-                    console.log(this.diagram);
+                    //console.log("done");
+                    //console.log(this.diagram);
                     break;
                 }   
                 case "2":{
@@ -261,7 +261,7 @@ export default {
                     }
                     this.connection.id2=this.diagram.machines[mach-1].id;
                     this.connection.id1=this.diagram.queues[que-1].id;
-                    console.log(this.connection);
+                    //console.log(this.connection);
                     const response = await axios.post("http://localhost:8095/connect/queue/machine/", this.connection);
                     this.diagram = response.data;
                     break;
@@ -288,23 +288,40 @@ export default {
         },
         async startSim() {
             var products = prompt("Enter number of products you need to simulate");
+            this.productsNum = products;
             await axios.post(("http://localhost:8095/start/simulation/"), {
                 numOfProducts: products
             });
             this.updateDiagram();
         },
         async updateDiagram() {
-            for (let index = 0; index < 100; index++) {
+            var response = await axios.get("http://localhost:8095/get/updates/");
+                this.diagram = (response.data);
+                console.log(this.diagram);
+                this.clear();
+                this.operation=null;
+                this.drawBoard();
+            while(this.diagram.queues[this.diagram.queues.length - 1].products.length != this.productsNum) {
                 console.log("Test Update")
-                var response = await axios.get("http://localhost:8095/get/updates/");
+                console.log(this.diagram.queues.length)
+                response = await axios.get("http://localhost:8095/get/updates/");
                 this.diagram = (response.data);
                 console.log(this.diagram);
                 this.clear();
                 this.operation=null;
                 this.drawBoard();
             }
+            alert("Simulation Completed");
         },
-    }
+        async loadPrev() {
+            var response = await axios.get("http://localhost:8095/prev/diagram/");
+            this.diagram = (response.data);
+            console.log(this.diagram);
+            this.clear();
+            this.operation=null;
+            this.drawBoard();
+        }
+    },
 };
 </script>
 
