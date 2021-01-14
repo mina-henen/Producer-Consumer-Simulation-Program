@@ -15,7 +15,7 @@
             <button class="opt" @click="clearRequest()" title="clear screen">New Diagram</button>
         </div>
         <div>
-            <button class="smiul" title="Start">Start simulation</button>
+            <button class="smiul" @click="startSim()" title="Start">Start simulation</button>
         </div>
         <!-- drawing area -->
         <canvas
@@ -192,7 +192,9 @@ export default {
             ctx.strokeStyle= "black";
             // draw machines
             for(i = 0 ; i<this.diagram.machines.length; ++i){
-                ctx.fillStyle = '#38ff78';
+                this.diagram.machines[i].currProduct = 898050;
+                console.log('#' + this.diagram.machines[i].currProduct.toString());
+                ctx.fillStyle = '#' + this.diagram.machines[i].currProduct.toString();
                 ctx.beginPath();
                 ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
                 ctx.fill();
@@ -282,6 +284,25 @@ export default {
             this.diagram = response.data;
             this.diagram = "";
             this.clear();
+        },
+        async startSim() {
+            var products = prompt("Enter number of products you need to simulate");
+            await axios.post(("http://localhost:8095/start/simulation/"), {
+                numOfProducts: products
+            });
+            this.updateDiagram();
+        },
+        async updateDiagram() {
+            for (let index = 0; index < 4; index++) {
+                console.log("Test Update")
+                var response = await axios.get("http://localhost:8095/get/updates/");
+                this.diagram = (response.data);
+                console.log(this.diagram);
+                this.clear();
+                this.operation=null;
+                this.drawBoard();
+            }
+            
         },
         /************************************************************************ OLD CODE *********************************************************************/
         /* function to detect the selected point by mouse click using mouse event (e)*/
