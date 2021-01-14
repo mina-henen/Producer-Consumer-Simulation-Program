@@ -191,9 +191,12 @@ export default {
             ctx.strokeStyle= "black";
             // draw machines
             for(i = 0 ; i<this.diagram.machines.length; ++i){
-                this.diagram.machines[i].currProduct = 898050;
-                console.log('#' + this.diagram.machines[i].currProduct.toString());
+                console.log(this.diagram);
+                if(this.diagram.machines[i].currProduct == -1) {
+                ctx.fillStyle = "green";        
+                } else{
                 ctx.fillStyle = '#' + this.diagram.machines[i].currProduct.toString();
+                }
                 ctx.beginPath();
                 ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
                 ctx.fill();
@@ -291,7 +294,7 @@ export default {
             this.updateDiagram();
         },
         async updateDiagram() {
-            for (let index = 0; index < 4; index++) {
+            for (let index = 0; index < 100; index++) {
                 console.log("Test Update")
                 var response = await axios.get("http://localhost:8095/get/updates/");
                 this.diagram = (response.data);
@@ -300,7 +303,6 @@ export default {
                 this.operation=null;
                 this.drawBoard();
             }
-            
         },
     }
 };
