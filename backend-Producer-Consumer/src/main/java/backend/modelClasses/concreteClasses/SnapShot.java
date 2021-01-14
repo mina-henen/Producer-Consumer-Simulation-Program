@@ -11,11 +11,10 @@ public class SnapShot {
     }
 
     public Diagram replay() {
-        for (Queue q : saveDiagram.getQueues()) {
-            q.setProductsList(new ArrayList<>());
-        }
-        for (Machine m : saveDiagram.getMachines()) {
-            m.setCurrProduct(-1);
+        int sz = saveDiagram.getQueues().size();
+        saveDiagram.getQueues().get(sz - 1).setProductsnumber(0);
+        while (saveDiagram.getQueues().get(sz - 1).getProducts().size() > 0) {
+            saveDiagram.getQueues().get(sz - 1).getProducts().remove(0);
         }
         return saveDiagram;
     }

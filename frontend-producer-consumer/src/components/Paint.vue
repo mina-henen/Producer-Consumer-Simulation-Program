@@ -4,18 +4,29 @@
     </div>
     <!-- the user interface code -->
     <div class="main">
-        
         <!-- operations on board buttons -->
         <div>
-            <button class="opt" @click="addMachine()" title="Add machine">Add machine</button>
-            <button class="opt" @click="addQueue" title="Add queue">Add queue</button>
-            <button class="opt" @click="connect" title="Connect">Connect</button>
+            <button class="opt" @click="addMachine()" title="Add machine">
+                Add machine
+            </button>
+            <button class="opt" @click="addQueue" title="Add queue">
+                Add queue
+            </button>
+            <button class="opt" @click="connect" title="Connect">
+                Connect
+            </button>
             <button class="opt" @click="delet" title="delete">Delete</button>
-            <button class="opt" @click="clearRequest()" title="clear screen">New Diagram</button>
-            <button class="opt" title="previous">Previous diagram</button>
+            <button class="opt" @click="clearRequest()" title="clear screen">
+                New Diagram
+            </button>
+            <button class="opt" @click="loadPrev()" title="previous">
+                Previous diagram
+            </button>
         </div>
         <div>
-            <button class="smiul" @click="startSim()" title="Start">Start simulation</button>
+            <button class="smiul" @click="startSim()" title="Start">
+                Start simulation
+            </button>
         </div>
         <!-- drawing area -->
         <canvas
@@ -39,30 +50,30 @@ export default {
     data() {
         return {
             operation: null,
-            mi:1,
-            qi:1,
-            
+            mi: 1,
+            qi: 1,
+            productsNum: "",
             diagram: {
-                machines:[],
-                queues:[],
-                machinesInL:[],
-                machinesOutL:[]
+                machines: [],
+                queues: [],
+                machinesInL: [],
+                machinesOutL: []
             },
             machine: {
                 location: {
                     x: 0,
-                    y:0
+                    y: 0
                 }
             },
             queue: {
                 location: {
                     x: 0,
-                    y:0
+                    y: 0
                 }
             },
             connection: {
                 id1: "",
-                id2: "",
+                id2: ""
             }
         };
     },
@@ -72,83 +83,102 @@ export default {
         this.canvas = c.getContext("2d");
     },
     methods: {
-        addMachine(){
-            this.operation = "ADD MACHINE"
+        addMachine() {
+            this.operation = "ADD MACHINE";
         },
-        addQueue(){
-            this.operation = "ADD QUEUE"
+        addQueue() {
+            this.operation = "ADD QUEUE";
         },
-        delet(){
-            this.operation = "DELETE"
+        delet() {
+            this.operation = "DELETE";
         },
-        start(){
+        start() {
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
-            ctx.fillStyle = 'black';
+            ctx.fillStyle = "black";
             ctx.beginPath();
-            ctx.arc(100,400,40,0,2 * Math.PI);
+            ctx.arc(100, 400, 40, 0, 2 * Math.PI);
             ctx.fill();
             ctx.fillStyle = "white";
             ctx.font = "20px Arial";
-            ctx.fillText("start", 80,400);
-            ctx.fillStyle = 'black';
+            ctx.fillText("start", 80, 400);
+            ctx.fillStyle = "black";
             ctx.beginPath();
-            ctx.arc(1400,400,40,0,2 * Math.PI);
+            ctx.arc(1400, 400, 40, 0, 2 * Math.PI);
             ctx.fill();
             ctx.fillStyle = "white";
             ctx.font = "20px Arial";
-            ctx.fillText("end", 1380,400);
-        }
-        ,
-        async dr(e){
+            ctx.fillText("end", 1380, 400);
+        },
+        async dr(e) {
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
             var x = e.offsetX;
             var y = e.offsetY;
-            switch(this.operation){
-                case "ADD MACHINE":{
+            switch (this.operation) {
+                case "ADD MACHINE": {
                     this.machine.location.x = x;
                     this.machine.location.y = y;
-                    console.log(this.machine.location);
-                    const response = await axios.post("http://localhost:8095/add/machine/", this.machine.location);
+                    //console.log(this.machine.location);
+                    const response = await axios.post(
+                        "http://localhost:8095/add/machine/",
+                        this.machine.location
+                    );
                     this.diagram = response.data;
-                           
-                    
+
                     break;
                 }
-                case "ADD QUEUE":
-                    {
+                case "ADD QUEUE": {
                     this.queue.location.x = x;
                     this.queue.location.y = y;
-                    console.log(this.queue);
-                    const response = await axios.post("http://localhost:8095/add/queue/", this.queue.location);
+                    //console.log(this.queue);
+                    const response = await axios.post(
+                        "http://localhost:8095/add/queue/",
+                        this.queue.location
+                    );
                     this.diagram = response.data;
-                    
-                    
+
                     break;
-                    }
+                }
                 case "DELETE":
-                    var i ;
-                    for(i = 0 ; i<this.diagram.machines.length; ++i){
-                    ctx.beginPath();
-                    ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
-                    ctx.closePath();
-                    if (ctx.isPointInPath(x, y)){
-                        console.log(this.diagram.machines[i].id);
-                        const response = await axios.post("http://localhost:8095/remove/machine/", this.diagram.machines[i].id);
-                        this.diagram = response.data;
-                        break;
+                    var i;
+                    for (i = 0; i < this.diagram.machines.length; ++i) {
+                        ctx.beginPath();
+                        ctx.arc(
+                            this.diagram.machines[i].location.x,
+                            this.diagram.machines[i].location.y,
+                            50,
+                            0,
+                            2 * Math.PI
+                        );
+                        ctx.closePath();
+                        if (ctx.isPointInPath(x, y)) {
+                            //console.log(this.diagram.machines[i].id);
+                            const response = await axios.post(
+                                "http://localhost:8095/remove/machine/",
+                                this.diagram.machines[i].id
+                            );
+                            this.diagram = response.data;
+                            break;
                         }
                     }
-                    for(i = 0 ; i<this.diagram.queues.length; ++i){
-                    ctx.beginPath();
-                    ctx.rect(this.diagram.queues[i].location.x-40,this.diagram.queues[i].location.y-25,80,50);
-                    ctx.closePath();
-                    if (ctx.isPointInPath(x, y)){
-                        console.log(this.diagram.queues[i].id);
-                        const response = await axios.post("http://localhost:8095/remove/queue/", this.diagram.queues[i].id);
-                        this.diagram = response.data;
-                        break;
+                    for (i = 0; i < this.diagram.queues.length; ++i) {
+                        ctx.beginPath();
+                        ctx.rect(
+                            this.diagram.queues[i].location.x - 40,
+                            this.diagram.queues[i].location.y - 25,
+                            80,
+                            50
+                        );
+                        ctx.closePath();
+                        if (ctx.isPointInPath(x, y)) {
+                            //console.log(this.diagram.queues[i].id);
+                            const response = await axios.post(
+                                "http://localhost:8095/remove/queue/",
+                                this.diagram.queues[i].id
+                            );
+                            this.diagram = response.data;
+                            break;
                         }
                     }
                     break;
@@ -156,113 +186,161 @@ export default {
                     break;
             }
             this.clear();
-            this.operation=null;
+            this.operation = null;
             this.drawBoard();
-            
         },
-        drawBoard(){
+        drawBoard() {
             this.clear();
             // draw yellow conections (into machines)
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
             var i;
-            ctx.strokeStyle= "yellow";
-            for(i = 0 ; i<this.diagram.machinesInL.length; ++i){
-                
+            ctx.strokeStyle = "yellow";
+            for (i = 0; i < this.diagram.machinesInL.length; ++i) {
                 ctx.beginPath();
-                ctx.moveTo(this.diagram.machinesInL[i].p1.x,this.diagram.machinesInL[i].p1.y);
-                ctx.lineWidth =4;
-                ctx.lineTo(this.diagram.machinesInL[i].p2.x,this.diagram.machinesInL[i].p2.y);
+                ctx.moveTo(
+                    this.diagram.machinesInL[i].p1.x,
+                    this.diagram.machinesInL[i].p1.y
+                );
+                ctx.lineWidth = 4;
+                ctx.lineTo(
+                    this.diagram.machinesInL[i].p2.x,
+                    this.diagram.machinesInL[i].p2.y
+                );
                 ctx.stroke();
-                ctx.lineWidth =1;
+                ctx.lineWidth = 1;
             }
 
             // draw blue connections (out of machines)
-            ctx.strokeStyle= "blue";
-            for(i = 0 ; i<this.diagram.machinesOutL.length; ++i){
-                
+            ctx.strokeStyle = "blue";
+            for (i = 0; i < this.diagram.machinesOutL.length; ++i) {
                 ctx.beginPath();
-                ctx.moveTo(this.diagram.machinesOutL[i].p1.x,this.diagram.machinesOutL[i].p1.y);
-                ctx.lineWidth =4;
-                ctx.lineTo(this.diagram.machinesOutL[i].p2.x,this.diagram.machinesOutL[i].p2.y);
+                ctx.moveTo(
+                    this.diagram.machinesOutL[i].p1.x,
+                    this.diagram.machinesOutL[i].p1.y
+                );
+                ctx.lineWidth = 4;
+                ctx.lineTo(
+                    this.diagram.machinesOutL[i].p2.x,
+                    this.diagram.machinesOutL[i].p2.y
+                );
                 ctx.stroke();
-                ctx.lineWidth =1;
+                ctx.lineWidth = 1;
             }
-            ctx.strokeStyle= "black";
+            ctx.strokeStyle = "black";
             // draw machines
-            for(i = 0 ; i<this.diagram.machines.length; ++i){
-                console.log(this.diagram);
-                if(this.diagram.machines[i].currProduct == -1) {
-                ctx.fillStyle = "green";        
-                } else{
-                ctx.fillStyle = '#' + this.diagram.machines[i].currProduct.toString();
+            for (i = 0; i < this.diagram.machines.length; ++i) {
+                //console.log(this.diagram);
+                if (this.diagram.machines[i].currProduct == -1) {
+                    ctx.fillStyle = "white";
+                } else {
+                    ctx.fillStyle =
+                        "#" + this.diagram.machines[i].currProduct.toString();
                 }
                 ctx.beginPath();
-                ctx.arc(this.diagram.machines[i].location.x,this.diagram.machines[i].location.y,50,0,2 * Math.PI);
+                ctx.arc(
+                    this.diagram.machines[i].location.x,
+                    this.diagram.machines[i].location.y,
+                    50,
+                    0,
+                    2 * Math.PI
+                );
                 ctx.fill();
                 ctx.stroke();
                 ctx.fillStyle = "black";
                 ctx.font = "30px Arial";
-                ctx.fillText("M"+this.mi, this.diagram.machines[i].location.x-20, this.diagram.machines[i].location.y+5);
+                ctx.fillText(
+                    "M" + this.mi,
+                    this.diagram.machines[i].location.x - 20,
+                    this.diagram.machines[i].location.y + 5
+                );
                 this.mi++;
             }
-           
+
             // draw queues
-            for(i = 0 ; i<this.diagram.queues.length; ++i){
-                ctx.fillStyle = '#ff4040';
-                ctx.fillRect(this.diagram.queues[i].location.x-40,this.diagram.queues[i].location.y-25,80,50);
-                ctx.strokeRect(this.diagram.queues[i].location.x-40,this.diagram.queues[i].location.y-25,80,50);
+            for (i = 0; i < this.diagram.queues.length; ++i) {
+                ctx.fillStyle = "#ff4040";
+                ctx.fillRect(
+                    this.diagram.queues[i].location.x - 40,
+                    this.diagram.queues[i].location.y - 25,
+                    80,
+                    50
+                );
+                ctx.strokeRect(
+                    this.diagram.queues[i].location.x - 40,
+                    this.diagram.queues[i].location.y - 25,
+                    80,
+                    50
+                );
                 ctx.fillStyle = "black";
                 ctx.font = "30px Arial";
-                ctx.fillText("Q"+this.qi, this.diagram.queues[i].location.x-20, this.diagram.queues[i].location.y+10);
+                if (this.diagram.queues[i].products.length > 0) {
+                    ctx.fillText(
+                        this.diagram.queues[i].products.length.toString(),
+                        this.diagram.queues[i].location.x - 20,
+                        this.diagram.queues[i].location.y + 10
+                    );
+                } else {
+                    ctx.fillText(
+                        "Q" + this.qi,
+                        this.diagram.queues[i].location.x - 20,
+                        this.diagram.queues[i].location.y + 10
+                    );
+                }
                 this.qi++;
             }
-            
-            
         },
-        async connect(){
+        async connect() {
             var mach;
             var que;
-            var way = prompt("Choose the way of connection.\n1- machine to queue.\n2- queue to machine.");
-            switch(way){
-                case "1":{
-                    mach=parseInt(prompt("Enter number of the machine."));
+            var way = prompt(
+                "Choose the way of connection.\n1- machine to queue.\n2- queue to machine."
+            );
+            switch (way) {
+                case "1": {
+                    mach = parseInt(prompt("Enter number of the machine."));
 
-                    if(mach-1>=this.diagram.machines.length){
+                    if (mach - 1 >= this.diagram.machines.length) {
                         alert("invalid machine.");
                         return;
                     }
-                    que= parseInt(prompt("Enter number of the queue."));
-                    
-                    if(que-1>=this.diagram.queues.length){
+                    que = parseInt(prompt("Enter number of the queue."));
+
+                    if (que - 1 >= this.diagram.queues.length) {
                         alert("invalid queue.");
                         return;
                     }
-                    this.connection.id1=this.diagram.machines[mach-1].id;
-                    this.connection.id2=this.diagram.queues[que-1].id;
-                    console.log(this.connection);
-                    const response = await axios.post("http://localhost:8095/connect/machine/queue/", this.connection);
+                    this.connection.id1 = this.diagram.machines[mach - 1].id;
+                    this.connection.id2 = this.diagram.queues[que - 1].id;
+                    //console.log(this.connection);
+                    const response = await axios.post(
+                        "http://localhost:8095/connect/machine/queue/",
+                        this.connection
+                    );
                     this.diagram = response.data;
-                    console.log("done");
-                    console.log(this.diagram);
+                    //console.log("done");
+                    //console.log(this.diagram);
                     break;
-                }   
-                case "2":{
-                    que= parseInt(prompt("Enter number of the queue."));
-                    if(que-1>=this.diagram.queues.length){
+                }
+                case "2": {
+                    que = parseInt(prompt("Enter number of the queue."));
+                    if (que - 1 >= this.diagram.queues.length) {
                         alert("invalid queue.");
                         return;
                     }
 
-                    mach=parseInt(prompt("Enter number of the machine."));
-                    if(mach-1>=this.diagram.machines.length){
+                    mach = parseInt(prompt("Enter number of the machine."));
+                    if (mach - 1 >= this.diagram.machines.length) {
                         alert("invalid machine.");
                         return;
                     }
-                    this.connection.id2=this.diagram.machines[mach-1].id;
-                    this.connection.id1=this.diagram.queues[que-1].id;
-                    console.log(this.connection);
-                    const response = await axios.post("http://localhost:8095/connect/queue/machine/", this.connection);
+                    this.connection.id2 = this.diagram.machines[mach - 1].id;
+                    this.connection.id1 = this.diagram.queues[que - 1].id;
+                    //console.log(this.connection);
+                    const response = await axios.post(
+                        "http://localhost:8095/connect/queue/machine/",
+                        this.connection
+                    );
                     this.diagram = response.data;
                     break;
                 }
@@ -270,15 +348,15 @@ export default {
                     alert("INVALID");
                     break;
             }
-            this.drawBoard();         
+            this.drawBoard();
         },
         /* clear functions */
         clear() {
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
-            this.mi=1;
-            this.qi=1;
+            this.mi = 1;
+            this.qi = 1;
         },
         async clearRequest() {
             const response = await axios.get("http://localhost:8095/clear/");
@@ -287,23 +365,62 @@ export default {
             this.clear();
         },
         async startSim() {
-            var products = prompt("Enter number of products you need to simulate");
-            await axios.post(("http://localhost:8095/start/simulation/"), {
+            var products = prompt(
+                "Enter number of products you need to simulate"
+            );
+            this.productsNum = products;
+            await axios.post("http://localhost:8095/start/simulation/", {
                 numOfProducts: products
             });
             this.updateDiagram();
         },
         async updateDiagram() {
-            for (let index = 0; index < 100; index++) {
-                console.log("Test Update")
-                var response = await axios.get("http://localhost:8095/get/updates/");
-                this.diagram = (response.data);
+            var response = await axios.get(
+                "http://localhost:8095/get/updates/"
+            );
+            this.diagram = response.data;
+            console.log(this.diagram);
+            this.clear();
+            this.operation = null;
+            this.drawBoard();
+            while (
+                this.diagram.queues[this.diagram.queues.length - 1].products
+                    .length != this.productsNum
+            ) {
+                console.log("Test Update");
+                console.log(this.diagram.queues.length);
+                response = await axios.get(
+                    "http://localhost:8095/get/updates/"
+                );
+                this.diagram = response.data;
                 console.log(this.diagram);
                 this.clear();
-                this.operation=null;
+                this.operation = null;
                 this.drawBoard();
             }
+            var zxz = 1000;
+            while(zxz > 0) zxz = zxz - 1;
+            console.log("Test Update");
+            console.log(this.diagram.queues.length);
+            response = await axios.get("http://localhost:8095/get/updates/");
+            this.diagram = response.data;
+            console.log(this.diagram);
+            this.clear();
+            this.operation = null;
+            this.drawBoard();
+            alert("Simulation Completed");
         },
+        async loadPrev() {
+            var response = await axios.get(
+                "http://localhost:8095/prev/diagram/"
+            );
+            this.diagram = response.data;
+            console.log(this.diagram);
+            this.clear();
+            this.operation = null;
+            this.drawBoard();
+            this.startSim();
+        }
     }
 };
 </script>
@@ -316,7 +433,6 @@ export default {
 .shapes {
     text-align: center;
 }
-
 
 .opt {
     display: inline-block;
@@ -368,7 +484,7 @@ label {
     margin-left: 20px;
 }
 .drawing-board {
-    cursor:copy;
+    cursor: copy;
     background-color: rgb(255, 255, 255);
     position: relative;
     display: block;
