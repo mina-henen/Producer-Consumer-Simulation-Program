@@ -13,7 +13,8 @@ public class HomeController {
         //Point point = new Point(po[0],po[1]);
         System.out.println(point.toString());
         Diagram diagram = Diagram.getInstance();
-        diagram.addMachine(new Machine(point));
+        Machine m = new Machine(point);
+        diagram.addMachine(m);
 
         return diagram;
     }

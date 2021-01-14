@@ -52,6 +52,11 @@ public class Queue {
     public void addItem(int item) {
         products.add(item);
         productsnumber++;
+        if (productsnumber == 1) {
+            System.out.println("operating");
+            System.out.println(ID);
+            System.out.println(products.toString());
+        }
         if (productsnumber == 10) {
             System.out.println("Finished");
             System.out.println(ID);
